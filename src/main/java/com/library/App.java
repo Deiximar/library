@@ -1,13 +1,34 @@
 package com.library;
 
-/**
- * Hello world!
- *
- */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+public class App {
+    public static void main(String[] args) {
+        String username = System.getenv("DB_USER");
+        String password = System.getenv("DB_PASSWORD");
+        String bdName = "library";
+        String url = "jdbc:postgresql://localhost:5432/" + bdName;
+
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            System.out.println("Conectado a la base de datos de PostgreSQL");
+
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM books");
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id_book");
+                String title = resultSet.getString("title");
+                String description = resultSet.getString("description");
+                String ISBN_code = resultSet.getString("isbn_code");
+
+                System.out.println("id: " + id + ", titulo: " + title + ", descripcion: " + description
+                        + ", codigo ISBN: " + ISBN_code);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
