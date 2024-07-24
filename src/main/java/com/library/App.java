@@ -5,10 +5,14 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 public class App {
     public static void main(String[] args) {
-        String username = System.getenv("DB_USER");
-        String password = System.getenv("DB_PASSWORD");
+        Dotenv dotenv = Dotenv.load();
+
+        String username = dotenv.get("DB_USER");
+        String password = dotenv.get("DB_PASSWORD");
         String bdName = "library";
         String url = "jdbc:postgresql://localhost:5432/" + bdName;
 
