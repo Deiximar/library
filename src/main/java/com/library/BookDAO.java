@@ -1,5 +1,6 @@
 package com.library;
 
+import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 //import java.sql.ResultSet;
@@ -9,8 +10,8 @@ import java.sql.SQLException;
 
 public class BookDAO {
 
-  public boolean addBook(Book book) {
-    boolean state = false;
+  public int addBook(Book book) {
+    int bookId = -1;
     Cconnection connection = new Cconnection();
     Connection connect = null;
     PreparedStatement preparedStatement = null;
@@ -20,7 +21,7 @@ public class BookDAO {
       if (connect != null) {
         String insertQuery = "INSERT INTO books (title, description, isbn_code) VALUES (?,?,?)";
 
-        preparedStatement = connect.prepareStatement(insertQuery);
+        preparedStatement = connect.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS);
 
         preparedStatement.setString(1, book.getTitle());
         preparedStatement.setString(2, book.getDescription());
@@ -28,18 +29,12 @@ public class BookDAO {
 
         int rowsAffected = preparedStatement.executeUpdate();
 
-        state = rowsAffected > 0;
-        // System.out.println("Filas insertadas: " + rowsAffected);
-
-        // String selectQuery = "SELECT * FROM books";
-        // ResultSet resultSet = connect.createStatement().executeQuery(selectQuery);
-
-        // while (resultSet.next()) {
-        // System.out.println("ID: " + resultSet.getInt("id"));
-        // System.out.println("Title: " + resultSet.getString("title"));
-        // System.out.println("Description: " + resultSet.getString("description"));
-        // System.out.println("ISBN Code: " + resultSet.getString("isbn_code"));
-        // }
+        if (rowsAffected > 0) {
+          ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+          if (generatedKeys.next()) {
+            bookId = generatedKeys.getInt(1);
+          }
+        }
 
       } else {
         System.out.println("Conexión a la base de datos fallida");
@@ -61,9 +56,8 @@ public class BookDAO {
       }
     }
 
-    return state;
+    return bookId;
   }
-
    public boolean updateBook(Book book) {
         boolean state = false;
         try (Connection connection = new Cconnection().setConnection()) {
@@ -111,7 +105,4 @@ public class BookDAO {
         }
         return book;
     }
-  }
-
-
-
+}

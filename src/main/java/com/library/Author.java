@@ -5,11 +5,10 @@ public class Author {
     private String name;
     private String lastName;
 
-    public Author(int idAuthor, String name, String lastName) {
-        this.idAuthor = idAuthor;
-        this.name = name;
-        this.lastName = lastName;
-    }
+  public Author(String name, String lastName) {
+    this.name = name;
+    this.lastName = lastName;
+  }
 
     public int getIdAuthor() {
         return this.idAuthor;
@@ -19,9 +18,9 @@ public class Author {
         return this.name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
     public String getLastName() {
         return this.lastName;
