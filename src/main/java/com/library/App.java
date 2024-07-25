@@ -28,7 +28,8 @@ public class App {
                     // deleteBook();
                     break;
                 case 5:
-                    // searchBook();
+                    SearchBooks searchBooks = new SearchBooks();
+                    searchBooks.searchBook();
                     break;
                 case 6:
                     System.exit(0);
