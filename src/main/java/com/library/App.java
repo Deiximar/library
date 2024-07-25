@@ -5,13 +5,14 @@ import java.util.Scanner;
 public class App {
     public static void main(String[] args) {
 
-        BookDAO model = new BookDAO();
+       // BookDAO model = new BookDAO();
+        SearchBooks searchBooks = new SearchBooks();
 
-        Book book = new Book("Una historia de Shimotsuma",
+        /* Book book = new Book("Una historia de Shimotsuma",
                 "Shimotsuma Monogatari sigue a Miko, una chica lolita, y Yuichi, un joven común, en Shimotsuma. A pesar de sus diferencias, desarrollan una amistad profunda que les ayuda a crecer y comprenderse.",
                 "9788494746017");
 
-        model.addBook(book);
+        model.addBook(book); */
 
         Scanner scanner = new Scanner(System.in);
 
@@ -21,13 +22,13 @@ public class App {
 
         int option = scanner.nextInt();
 
-        while (option > 6 || option < 1) {
+        do {
             switch (option) {
                 case 1:
                     // showAllBooks();
                     break;
                 case 2:
-                    // addBook();
+                    //addBook();
                     break;
                 case 3:
                     // editBook();
@@ -36,7 +37,7 @@ public class App {
                     // deleteBook();
                     break;
                 case 5:
-                    // searchBook();
+                    searchBooks.searchBook();
                     break;
                 case 6:
                     System.exit(0);
@@ -44,7 +45,11 @@ public class App {
                     System.out.println("Seleccione un numero del 1 - 6\n");
                     option = scanner.nextInt();
             }
-
+        } while (option > 6 || option < 1);
+        scanner.close();
+    }
+}
+     
             // Statement statement = connection.createStatement();
             // ResultSet resultSet = statement.executeQuery("SELECT * FROM books");
 
@@ -58,9 +63,4 @@ public class App {
             // description
             // + ", codigo ISBN: " + ISBN_code);
             // }
-        }
-
-        scanner.close();
-    }
-
-}
+   
