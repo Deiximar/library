@@ -3,18 +3,9 @@ package com.library;
 import java.util.Scanner;
 
 public class App {
+    private static Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) {
-
-       // BookDAO model = new BookDAO();
-        SearchBooks searchBooks = new SearchBooks();
-
-        /* Book book = new Book("Una historia de Shimotsuma",
-                "Shimotsuma Monogatari sigue a Miko, una chica lolita, y Yuichi, un joven común, en Shimotsuma. A pesar de sus diferencias, desarrollan una amistad profunda que les ayuda a crecer y comprenderse.",
-                "9788494746017");
-
-        model.addBook(book); */
-
-        Scanner scanner = new Scanner(System.in);
 
         System.out.println("\nBiblioteca de todos\n¿Qué desea realizar? (Selecione un número)");
         System.out.println(
@@ -28,7 +19,7 @@ public class App {
                     // showAllBooks();
                     break;
                 case 2:
-                    //addBook();
+                    addBook();
                     break;
                 case 3:
                     // editBook();
@@ -37,6 +28,7 @@ public class App {
                     // deleteBook();
                     break;
                 case 5:
+                    SearchBooks searchBooks = new SearchBooks();
                     searchBooks.searchBook();
                     break;
                 case 6:
@@ -46,21 +38,57 @@ public class App {
                     option = scanner.nextInt();
             }
         } while (option > 6 || option < 1);
+
         scanner.close();
     }
+
+    public static void addBook() {
+        scanner.nextLine();
+        BookDAO bookModel = new BookDAO();
+        AuthorDAO authorModel = new AuthorDAO();
+        GenreDAO genreModel = new GenreDAO();
+        AuthorBookDAO authorBookModel = new AuthorBookDAO();
+        GenreBookDAO genreBookModel = new GenreBookDAO();
+
+        System.out.println("\nPara añadir un libro ingrese los siguientes campos: ");
+
+        System.out.print("Título: ");
+        String title = scanner.nextLine();
+
+        System.out.print("Nombre del autor: ");
+        String authorName = scanner.nextLine();
+
+        System.out.print("Apellido del autor: ");
+        String authorLastname = scanner.nextLine();
+
+        System.out.print("Descripción: ");
+        String description = scanner.nextLine();
+
+        System.out.print("Código ISBN: ");
+        String codeISBN = scanner.nextLine();
+
+        System.out.print("Género: ");
+        String genreBook = scanner.nextLine();
+
+        Book book = new Book(title, description, codeISBN);
+        Author author = new Author(authorName, authorLastname);
+        Genre genre = new Genre(genreBook);
+
+        int bookId = bookModel.addBook(book);
+        int authorId = authorModel.addAuthor(author);
+        int genreId = genreModel.addGenre(genre);
+
+        if (bookId > 0 && authorId > 0 && genreId > 0) {
+            boolean isAuthorBookAdded = authorBookModel.addAuthorBook(authorId, bookId);
+            boolean isGenreBookAdded = genreBookModel.addGenreBook(genreId, bookId);
+            if (isAuthorBookAdded && isGenreBookAdded) {
+                System.out.println("Libro, autor y género asociados correctamente.");
+            } else {
+                System.out.println("Fallo al asociar libro con autor o género.");
+            }
+        } else {
+            System.out.println("Fallo al añadir libro, autor o género.");
+        }
+    }
+
 }
-     
-            // Statement statement = connection.createStatement();
-            // ResultSet resultSet = statement.executeQuery("SELECT * FROM books");
-
-            // while (resultSet.next()) {
-            // int id = resultSet.getInt("id_book");
-            // String title = resultSet.getString("title");
-            // String description = resultSet.getString("description");
-            // String ISBN_code = resultSet.getString("isbn_code");
-
-            // System.out.println("id: " + id + ", titulo: " + title + ", descripcion: " +
-            // description
-            // + ", codigo ISBN: " + ISBN_code);
-            // }
-   
