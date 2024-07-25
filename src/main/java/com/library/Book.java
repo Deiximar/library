@@ -10,11 +10,15 @@ public class Book {
     this.title = title;
     this.description = description;
     this.codeISBN = codeISBN;
+    this.idBook = 0;
   }
-
   public int getIdBook() {
     return this.idBook;
-  }
+}
+
+public void setIdBook(int idBook) {
+    this.idBook = idBook;
+}
 
   public String getTitle() {
     return this.title;

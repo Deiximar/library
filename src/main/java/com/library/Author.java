@@ -1,33 +1,33 @@
 package com.library;
 
 public class Author {
-  private int idAuthor;
-  private String name;
-  private String lastName;
+    private int idAuthor;
+    private String name;
+    private String lastName;
 
-  public Author(int idAuthor, String name, String lastName) {
-    this.idAuthor = idAuthor;
-    this.name = name;
-    this.lastName = lastName;
-  }
+    public Author(int idAuthor, String name, String lastName) {
+        this.idAuthor = idAuthor;
+        this.name = name;
+        this.lastName = lastName;
+    }
 
-  public int getIdAuthor() {
-    return this.idAuthor;
-  }
+    public int getIdAuthor() {
+        return this.idAuthor;
+    }
 
-  public String getName() {
-    return this.name;
-  }
+    public String getName() {
+        return this.name;
+    }
 
-  public void getName(String name) {
-    this.name = name;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public String getLastName() {
-    return this.lastName;
-  }
+    public String getLastName() {
+        return this.lastName;
+    }
 
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 }

@@ -1,4 +1,7 @@
- com.library.edit;
+package com.library.edit;
+
+import com.library.Book; 
+import com.library.BookDAO; 
 
 public class EditFunction {
     private BookDAO bookDAO;
@@ -17,12 +20,8 @@ public class EditFunction {
 
     // Método para actualizar un libro dado su id, título, descripción e ISBN
     public void updateBookDetails(int id, String title, String description, String isbnCode) {
-        Book book = new Book();
-        book.setId(id);
-        book.setTitle(title);
-        book.setDescription(descripackageption);
-        book.setIsbnCode(isbnCode);
+        Book book = new Book(title, description, isbnCode);
+        book.setIdBook(id);
         updateBook(book);
     }
 }
-

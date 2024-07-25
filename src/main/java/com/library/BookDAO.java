@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 //import java.sql.ResultSet;
 //import java.sql.Statement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class BookDAO {
 
@@ -61,4 +63,55 @@ public class BookDAO {
 
     return state;
   }
-}
+
+   public boolean updateBook(Book book) {
+        boolean state = false;
+        try (Connection connection = new Cconnection().setConnection()) {
+            if (connection != null) {
+                String updateQuery = "UPDATE books SET title = ?, description = ?, isbn_code = ? WHERE id_book = ?";
+                try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
+                    preparedStatement.setString(1, book.getTitle());
+                    preparedStatement.setString(2, book.getDescription());
+                    preparedStatement.setString(3, book.getCodeISBN());
+                    preparedStatement.setInt(4, book.getIdBook());
+                    int rowsAffected = preparedStatement.executeUpdate();
+                    state = rowsAffected > 0;
+                }
+            } else {
+                System.out.println("Conexión a la base de datos fallida");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return state;
+    }
+
+    public Book getBookById(int id) {
+        Book book = null;
+        try (Connection connection = new Cconnection().setConnection()) {
+            if (connection != null) {
+                String selectQuery = "SELECT * FROM books WHERE id_book = ?";
+                try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
+                    preparedStatement.setInt(1, id);
+                    try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                        if (resultSet.next()) {
+                            String title = resultSet.getString("title");
+                            String description = resultSet.getString("description");
+                            String isbnCode = resultSet.getString("isbn_code");
+                            book = new Book(title, description, isbnCode);
+                            book.setIdBook(id);
+                        }
+                    }
+                }
+            } else {
+                System.out.println("Conexión a la base de datos fallida");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return book;
+    }
+  }
+
+
+
