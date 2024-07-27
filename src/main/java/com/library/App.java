@@ -25,7 +25,8 @@ public class App {
                     // editBook();
                     break;
                 case 4:
-                    // deleteBook();
+                    DeleteBook deleteBook = new DeleteBook();
+                    deleteBook.deleteBook();
                     break;
                 case 5:
                     SearchBooks searchBooks = new SearchBooks();
