@@ -8,37 +8,42 @@ public class App {
     public static void main(String[] args) {
 
         System.out.println("\nBiblioteca de todos\n¿Qué desea realizar? (Selecione un número)");
-        System.out.println(
-                " 1. Mostrar todos los libros\n 2. Añadir un libro\n 3. Editar un libro\n 4. Eliminar un libro\n 5. Realizar una búsqueda\n 6.Salir\n");
 
-        int option = scanner.nextInt();
+        int option;
 
         do {
-            switch (option) {
-                case 1:
-                    // showAllBooks();
-                    break;
-                case 2:
-                    addBook();
-                    break;
-                case 3:
-                    // editBook();
-                    break;
-                case 4:
-                    DeleteBook deleteBook = new DeleteBook();
-                    deleteBook.deleteBook();
-                    break;
-                case 5:
-                    SearchBooks searchBooks = new SearchBooks();
-                    searchBooks.searchBook();
-                    break;
-                case 6:
-                    System.exit(0);
-                default:
-                    System.out.println("Seleccione un numero del 1 - 6\n");
-                    option = scanner.nextInt();
+            System.out.println(
+                    " 1.\nMostrar todos los libros\n 2. Añadir un libro\n 3. Editar un libro\n 4. Eliminar un libro\n 5. Realizar una búsqueda\n 6.Salir\n");
+
+            option = scanner.nextInt();
+            if (option < 1 || option > 6) {
+                System.out.println("Seleccione un número del 1 - 6\n");
+
+            } else {
+                switch (option) {
+                    case 1:
+                        // showAllBooks();
+                        break;
+                    case 2:
+                        addBook();
+                        break;
+                    case 3:
+                        // editBook();
+                        break;
+                    case 4:
+                        DeleteBook deleteBook = new DeleteBook();
+                        deleteBook.deleteBook();
+                        break;
+                    case 5:
+                        SearchBooks searchBooks = new SearchBooks();
+                        searchBooks.searchBook();
+                        break;
+                    case 6:
+                        System.out.println("Saliendo...");
+                        System.exit(0);
+                }
             }
-        } while (option > 6 || option < 1);
+        } while (option != 6);
 
         scanner.close();
     }
