@@ -9,8 +9,8 @@ public class Cconnection {
   Dotenv dotenv = Dotenv.load();
   Connection connection;
 
-  String username = dotenv.get("postgres");
-  String password = "1980";
+  String username = dotenv.get("DB_USER");
+  String password = dotenv.get("DB_PASSWORD");
   String bdName = "library";
   String url = "jdbc:postgresql://localhost:5432/" + bdName;
 
