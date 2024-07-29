@@ -91,7 +91,6 @@ public class SearchBooks {
     private int search(String query, String parameter, boolean includeDescription) {
         int count = 0;
 
-        // Definir el formato de impresión basado en si se incluye o no la descripción
         String format;
         if (includeDescription) {
             format = "| %-10d | %-30s | %-30s | %-40s | %-15s |%n";
@@ -141,7 +140,7 @@ public class SearchBooks {
     private int search(String query, String param1, String param2, boolean includeDescription) {
         int count = 0;
 
-        // Definir el formato de impresión basado en si se incluye o no la descripción
+        
         String format;
         if (includeDescription) {
             format = "| %-10d | %-30s | %-30s | %-40s | %-15s |%n";
@@ -156,7 +155,7 @@ public class SearchBooks {
             preparedStatement.setString(2, param2);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            // Imprimir encabezado de tabla
+            
             System.out.format("+------------+--------------------------------+--------------------------------+------------------------------------------+-----------------+%n");
             if (includeDescription) {
                 System.out.format("| ID         | Título                         | Autor                          | Descripción                              | ISBN            |%n");
@@ -172,7 +171,6 @@ public class SearchBooks {
                 String author = resultSet.getString("author");
                 String isbn = resultSet.getString("isbn_code");
                 
-                // Obtener la descripción solo si está incluida en la consulta
                 String description = includeDescription ? resultSet.getString("description") : "";
 
                 if (includeDescription) {
