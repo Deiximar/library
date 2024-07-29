@@ -6,36 +6,40 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import com.library.config.DBManager;
+
 public class DeleteBook {
+    private Connection connect;
+    private PreparedStatement preparedStatement;
 
-    public void deleteBook() {
-        ArrayList<Integer> bookIdList =  showAllBooks();
+    public void deleteBook(Scanner scanner) {
+        ArrayList<Integer> bookIdList = showAllBooks();
         Boolean shouldAskId = true;
-        Scanner scanner = new Scanner(System.in);
+        int idBook;
 
-        while(shouldAskId) {
+        while (shouldAskId) {
             System.out.println("Escribe el ID del libro que deseas eliminar");
-            int idBook = scanner.nextInt();
+            idBook = scanner.nextInt();
+            scanner.nextLine();
             if (idBook > 0 && bookIdList.contains(idBook)) {
                 shouldAskId = false;
                 System.out.println("El ID es válido");
                 deleteAuthorBookByBookId(idBook);
+                deleteGenresBookByBookId(idBook);
                 deleteBookById(idBook);
             } else {
                 System.out.println("El ID introducido no es válido");
             }
         }
-        scanner.close();
     }
 
-
-
-    private ArrayList<Integer> showAllBooks() {
-        ArrayList<Integer> idList = new ArrayList<>(); 
+    public ArrayList<Integer> showAllBooks() {
+        ArrayList<Integer> idList = new ArrayList<>();
 
         String query = "SELECT * FROM books";
-        try (Connection connect = new Cconnection().setConnection();
-             PreparedStatement preparedStatement = connect.prepareStatement(query)) {
+        try {
+            connect = DBManager.initConnection();
+            preparedStatement = connect.prepareStatement(query);
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -44,7 +48,7 @@ public class DeleteBook {
                 String title = resultSet.getString("title");
                 idList.add(id);
 
-                System.out.println("ID: " + id + ", Título: " + title );   
+                System.out.println("ID: " + id + ", Título: " + title);
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -52,11 +56,12 @@ public class DeleteBook {
         return idList;
     }
 
-    private int deleteBookById(int id) {
+    public int deleteBookById(int id) {
         String query = "DELETE FROM books WHERE id_book = ?";
         int resultRowsDeleted = 0;
-        try (Connection connect = new Cconnection().setConnection();
-        PreparedStatement preparedStatement = connect.prepareStatement(query)) {
+        try {
+            connect = DBManager.initConnection();
+            preparedStatement = connect.prepareStatement(query);
 
             preparedStatement.setInt(1, id);
             resultRowsDeleted = preparedStatement.executeUpdate();
@@ -65,24 +70,39 @@ public class DeleteBook {
             } else {
                 System.out.println("El libro no se ha podido eliminar.");
             }
-        }  catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
-        } 
+        }
         return resultRowsDeleted;
     }
 
-    private int deleteAuthorBookByBookId(int id) {
+    public int deleteAuthorBookByBookId(int id) {
         String query = "DELETE FROM authors_books WHERE id_book = ?";
         int resultRowsDeleted = 0;
-        try (Connection connect = new Cconnection().setConnection();
-        PreparedStatement preparedStatement = connect.prepareStatement(query)) {
+        try {
+            connect = DBManager.initConnection();
+            preparedStatement = connect.prepareStatement(query);
 
             preparedStatement.setInt(1, id);
             resultRowsDeleted = preparedStatement.executeUpdate();
-        }  catch (Exception e) {
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return resultRowsDeleted;
+    }
+
+    public int deleteGenresBookByBookId(int id) {
+        String query = "DELETE FROM genders_books WHERE id_book = ?";
+        int resultRowsDeleted = 0;
+        try {
+            connect = DBManager.initConnection();
+            preparedStatement = connect.prepareStatement(query);
+
+            preparedStatement.setInt(1, id);
+            resultRowsDeleted = preparedStatement.executeUpdate();
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         return resultRowsDeleted;
     }
 }
-

@@ -1,33 +1,36 @@
-package com.library;
+package com.library.model;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-public class GenreDAO {
+import com.library.config.DBManager;
 
-  public int addGenre(Genre genre) {
-    int genreId = findGenreByName(genre.getGenre());
-    if (genreId != -1) {
-      return genreId;
+public class AuthorDAO {
+
+  private Connection connect;
+  private PreparedStatement preparedStatement;
+
+  public int addAuthor(Author author) {
+    int authorId = findAuthorByName(author.getName(), author.getLastName());
+    if (authorId != -1) {
+      return authorId;
     }
 
-    Cconnection connection = new Cconnection();
-    Connection connect = null;
-    PreparedStatement preparedStatement = null;
-
     try {
-      connect = connection.setConnection();
+      connect = DBManager.initConnection();
       if (connect != null) {
-        String insertQuery = "INSERT INTO genders(gender) VALUES (?)";
+        String insertQuery = "INSERT INTO authors (name, last_name) VALUES (?,?)";
         preparedStatement = connect.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS);
-        preparedStatement.setString(1, genre.getGenre());
+        preparedStatement.setString(1, author.getName());
+        preparedStatement.setString(2, author.getLastName());
         int rowsAffected = preparedStatement.executeUpdate();
+
         if (rowsAffected > 0) {
           ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
           if (generatedKeys.next()) {
-            genreId = generatedKeys.getInt(1);
+            authorId = generatedKeys.getInt(1);
           }
         }
       } else {
@@ -49,26 +52,25 @@ public class GenreDAO {
         System.out.println(e.getMessage());
       }
     }
-    return genreId;
+    return authorId;
   }
 
-  public int findGenreByName(String genre) {
-    int genreId = -1;
-    Cconnection connection = new Cconnection();
-    Connection connect = null;
-    PreparedStatement preparedStatement = null;
+  public int findAuthorByName(String name, String lastName) {
+    int authorId = -1;
+
     ResultSet resultSet = null;
 
     try {
-      connect = connection.setConnection();
+      connect = DBManager.initConnection();
       if (connect != null) {
-        String selectQuery = "SELECT id_gender FROM genders WHERE gender = ?";
-        preparedStatement = connect.prepareStatement(selectQuery);
-        preparedStatement.setString(1, genre);
+        String selectQuery = "SELECT id_author FROM authors WHERE name = ? AND last_name = ?";
+        preparedStatement = connect.prepareStatement(selectQuery, Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.setString(1, name);
+        preparedStatement.setString(2, lastName);
         resultSet = preparedStatement.executeQuery();
 
         if (resultSet.next()) {
-          genreId = resultSet.getInt("id_gender");
+          authorId = resultSet.getInt("id_author");
         }
       } else {
         System.out.println("Conexión a la base de datos fallida");
@@ -92,7 +94,7 @@ public class GenreDAO {
         System.out.println(e.getMessage());
       }
     }
-    return genreId;
+    return authorId;
   }
 
 }

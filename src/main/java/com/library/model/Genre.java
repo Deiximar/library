@@ -1,4 +1,4 @@
-package com.library;
+package com.library.model;
 
 public class Genre {
   private int idGenre;
@@ -10,6 +10,10 @@ public class Genre {
 
   public int getIdGenre() {
     return this.idGenre;
+  }
+
+  public void setIdGenre(int idGenre) {
+    this.idGenre = idGenre;
   }
 
   public String getGenre() {
