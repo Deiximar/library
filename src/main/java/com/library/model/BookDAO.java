@@ -1,6 +1,9 @@
-package com.library;
+package com.library.model;
 
 import java.sql.Statement;
+
+import com.library.config.DBManager;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 //import java.sql.ResultSet;
@@ -8,14 +11,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class BookDAO {
+  private Connection connect;
+  private PreparedStatement preparedStatement;
 
   public int addBook(Book book) {
     int bookId = -1;
-    Cconnection connection = new Cconnection();
-    Connection connect = null;
-    PreparedStatement preparedStatement = null;
+
     try {
-      connect = connection.setConnection();
+      connect = DBManager.initConnection();
 
       if (connect != null) {
         String insertQuery = "INSERT INTO books (title, description, isbn_code) VALUES (?,?,?)";

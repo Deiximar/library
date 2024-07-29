@@ -4,6 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.library.model.Author;
+import com.library.model.AuthorBookDAO;
+import com.library.model.AuthorDAO;
+import com.library.model.Book;
+import com.library.model.BookDAO;
+import com.library.model.Genre;
+import com.library.model.GenreBookDAO;
+import com.library.model.GenreDAO;
+
 public class App {
     private static Scanner scanner = new Scanner(System.in);
 
@@ -34,7 +43,7 @@ public class App {
                         break;
                     case 4:
                         DeleteBook deleteBook = new DeleteBook();
-                        deleteBook.deleteBook();
+                        deleteBook.deleteBook(scanner);
                         break;
                     case 5:
                         SearchBooks searchBooks = new SearchBooks();
