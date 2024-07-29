@@ -161,7 +161,7 @@ public class SearchBooks {
     private int searchBookByTitle(Scanner scanner) {
         System.out.println("¿Cuál es el título del libro que quiere buscar?:");
         String bookTitle = scanner.nextLine();
-        return search("SELECT id_book, title, description, isbn_code FROM books WHERE title = ?", bookTitle, true);
+        return search("SELECT * FROM books WHERE title = ?", bookTitle, true);
     }
 
     private int searchBookByAuthor(Scanner scanner) {
@@ -186,6 +186,35 @@ public class SearchBooks {
              PreparedStatement preparedStatement = connect.prepareStatement(query)) {
 
             preparedStatement.setString(1, parameter);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                count++;
+                int id = resultSet.getInt("id_book");
+                String title = resultSet.getString("title");
+                String description = resultSet.getString("description");
+                String isbn = resultSet.getString("isbn_code");
+
+                if (includeDescription) {
+                    System.out.println("ID: " + id + ", Título: " + title + ", Descripción: " + description +
+                            ", ISBN: " + isbn);
+                } else {
+                    System.out.println("ID: " + id + ", Título: " + title +
+                            ", ISBN: " + isbn);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return count;
+    }
+    private int search(String query, String param1, String param2, boolean includeDescription) {
+        int count = 0;
+        try (Connection connect = new Cconnection().setConnection();
+             PreparedStatement preparedStatement = connect.prepareStatement(query)) {
+
+            preparedStatement.setString(1, param1);
+            preparedStatement.setString(2, param2);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
