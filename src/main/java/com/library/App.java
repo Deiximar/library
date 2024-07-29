@@ -12,10 +12,8 @@ public class App {
         int option;
 
         do {
-            System.out.println(
-
-                "\n 1. Mostrar todos los libros\n 2. Añadir un libro\n 3. Editar un libro\n 4. Eliminar un libro\n 5. Realizar una búsqueda\n 6. Salir\n");
-
+          "\n 1. Mostrar todos los libros\n 2. Añadir un libro\n 3. Editar un libro\n 4. Eliminar un libro\n 5. Realizar una búsqueda\n 6. Salir\n");
+          
             option = scanner.nextInt();
             if (option < 1 || option > 6) {
                 System.out.println("Seleccione un número del 1 - 6\n");

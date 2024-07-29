@@ -1,4 +1,4 @@
-package com.library;
+ package com.library;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -170,28 +170,21 @@ public class SearchBooks {
                 String title = resultSet.getString("title");
                 String author = resultSet.getString("author");
                 String isbn = resultSet.getString("isbn_code");
-                
-                String description = includeDescription ? resultSet.getString("description") : "";
+                String author = resultSet.getString("author");
+                String gender = resultSet.getString("gender"); 
 
                 if (includeDescription) {
-                    System.out.format(format, id, title, author, truncate(description, 40), isbn);
+                    System.out.println("ID: " + id + ", Título: " + title + ", Descripción: " + description +
+                            ", ISBN: " + isbn + ", Autor: " + author + ", Género: " + gender *;
                 } else {
-                    System.out.format(format, id, title, author, isbn);
+                    System.out.println("ID: " + id + ", Título: " + title +
+                            ", ISBN: " + isbn + ", Autor: " + author + ", Género: " + gender );
                 }
             }
-
-            System.out.format("+------------+--------------------------------+--------------------------------+------------------------------------------+-----------------+%n");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         return count;
     }
-
-    private String truncate(String value, int length) {
-        if (value.length() <= length) {
-            return value;
-        } else {
-            return value.substring(0, length - 3) + "...";
-        }
-    }
 }
+
