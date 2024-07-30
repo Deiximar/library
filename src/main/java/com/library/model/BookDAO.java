@@ -19,7 +19,27 @@ public class BookDAO implements BookDAOInterface {
   public List<Book> getAllBooks() {
     List<Book> books = new ArrayList<>();
 
-    String query = "SELECT * FROM books";
+    // String query = "SELECT "
+    // + "b.id AS book_id, "
+    // + "b.title, "
+    // + "b.isbn_code, "
+    // + "a.name AS author_name, "
+    // + "a.last_name AS author_last_name, "
+    // + "g.genre "
+    // + "FROM "
+    // + "public.books b "
+    // + "LEFT JOIN "
+    // + "public.authors_books ab ON b.id = ab.id_book "
+    // + "LEFT JOIN "
+    // + "public.authors a ON ab.id_author = a.id "
+    // + "LEFT JOIN "
+    // + "public.genres_books gb ON b.id = gb.id_book "
+    // + "LEFT JOIN "
+    // + "public.genres g ON gb.id_genre = g.id;";
+
+    String query = "SELECT b.id, b.title, b.description, b.isbn_code " +
+        "FROM books b ";
+
     try {
       connect = DBManager.initConnection();
       preparedStatement = connect.prepareStatement(query);
@@ -28,8 +48,22 @@ public class BookDAO implements BookDAOInterface {
 
       while (resultSet.next()) {
         Book book = new Book();
-        book.setIdBook(resultSet.getInt("id_book"));
+        book.setIdBook(resultSet.getInt("id"));
         book.setTitle(resultSet.getString("title"));
+        book.setDescription(resultSet.getString("description"));
+        book.setCodeISBN(resultSet.getString("isbn_code"));
+
+        // Author author = new Author();
+        // author.setIdAuthor(resultSet.getInt("id_author"));
+        // author.setName(resultSet.getString("author_name"));
+        // author.setLastName(resultSet.getString("last_name"));
+        // book.setAuthor(author);
+
+        // Genre genre = new Genre();
+        // genre.setIdGenre(resultSet.getInt("id_genre"));
+        // genre.setGenre(resultSet.getString("genre"));
+        // book.setGenre(genre);
+
         books.add(book);
       }
     } catch (Exception e) {
@@ -83,26 +117,6 @@ public class BookDAO implements BookDAOInterface {
     }
 
     return bookId;
-  }
-
-  public List<Book> getAllBooks() {
-    List<Book> books = new ArrayList<>();
-    String sql = "SELECT * FROM books";
-    try {
-      connect = DBManager.initConnection();
-      preparedStatement = connect.prepareStatement(sql);
-      ResultSet result = preparedStatement.executeQuery();
-
-      int id = result.getInt("id_book");
-      String title = result.getString("title");
-      String author = result.getString("author");
-      String isbn = result.getString("isbn_code");
-
-    } catch (Exception e) {
-      System.out.println(e.getMessage());
-    } finally {
-      DBManager.closeConnection();
-    }
   }
 
   public int deleteGenresBookByBookId(int id) {

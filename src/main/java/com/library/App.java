@@ -31,8 +31,8 @@ public class App {
             } else {
                 switch (option) {
                     case 1:
-                        ShowAllBooks showAllBooks = new showAllBooks();
-                        showAllBooks.showAllBooks();
+                        ShowAllBooks showAllBooks = new ShowAllBooks();
+                        showAllBooks.displayAllBooks();
                         break;
                     case 2:
                         bookView.addBook(scanner);

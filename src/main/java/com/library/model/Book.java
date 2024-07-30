@@ -5,8 +5,11 @@ public class Book {
   private String title;
   private String description;
   private String codeISBN;
+  private Author author; // Nueva relación con Author
+  private Genre genre; // Nueva relación con Genre
 
-  public Book () {}
+  public Book() {
+  }
 
   public Book(String title, String description, String codeISBN) {
     this.title = title;
@@ -44,6 +47,22 @@ public class Book {
 
   public void setCodeISBN(String codeISBN) {
     this.codeISBN = codeISBN;
+  }
+
+  public Genre getGenre() {
+    return genre;
+  }
+
+  public void setGenre(Genre genre) {
+    this.genre = genre;
+  }
+
+  public Author getAuthor() {
+    return author;
+  }
+
+  public void setAuthor(Author author) {
+    this.author = author;
   }
 
 }

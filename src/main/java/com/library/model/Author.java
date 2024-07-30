@@ -10,6 +10,10 @@ public class Author {
     this.lastName = lastName;
   }
 
+  public Author() {
+    // TODO Auto-generated constructor stub
+  }
+
   public int getIdAuthor() {
     return this.idAuthor;
   }

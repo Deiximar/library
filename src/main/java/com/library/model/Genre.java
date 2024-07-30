@@ -8,6 +8,10 @@ public class Genre {
     this.genre = genre;
   }
 
+  public Genre() {
+    // TODO Auto-generated constructor stub
+  }
+
   public int getIdGenre() {
     return this.idGenre;
   }
