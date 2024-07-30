@@ -16,6 +16,28 @@ public class BookDAO implements BookDAOInterface {
   private Connection connect;
   private PreparedStatement preparedStatement;
 
+  public List<Book> getAllBooks() {
+    List<Book> books = new ArrayList<>();
+
+    String query = "SELECT * FROM books";
+    try {
+      connect = DBManager.initConnection();
+      preparedStatement = connect.prepareStatement(query);
+
+      ResultSet resultSet = preparedStatement.executeQuery();
+
+      while (resultSet.next()) {
+        Book book = new Book();
+        book.setIdBook(resultSet.getInt("id_book"));
+        book.setTitle(resultSet.getString("title"));
+        books.add(book);
+      }
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
+    return books;
+  }
+
   public int addBook(Book book) {
     int bookId = -1;
 
@@ -63,7 +85,7 @@ public class BookDAO implements BookDAOInterface {
     return bookId;
   }
 
-  public List<Book> getBooks() {
+  public List<Book> getAllBooks() {
     List<Book> books = new ArrayList<>();
     String sql = "SELECT * FROM books";
     try {
@@ -83,4 +105,39 @@ public class BookDAO implements BookDAOInterface {
     }
   }
 
+  public int deleteGenresBookByBookId(int id) {
+    String query = "DELETE FROM genres_books WHERE id_book = ?";
+    int resultRowsDeleted = 0;
+    try {
+      connect = DBManager.initConnection();
+      preparedStatement = connect.prepareStatement(query);
+
+      preparedStatement.setInt(1, id);
+      resultRowsDeleted = preparedStatement.executeUpdate();
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
+    return resultRowsDeleted;
+  }
+
+  public int deleteBookById(int id) {
+    String query = "DELETE FROM books WHERE id_book = ?";
+    int resultRowsDeleted = 0;
+    String RESET = "\033[0m";
+    try {
+      connect = DBManager.initConnection();
+      preparedStatement = connect.prepareStatement(query);
+
+      preparedStatement.setInt(1, id);
+      resultRowsDeleted = preparedStatement.executeUpdate();
+      if (resultRowsDeleted > 0) {
+        System.out.println("\n\033[32mSu libro se ha eliminado exitosamente!" + RESET);
+      } else {
+        System.out.println("\n\033[31mEl libro no se ha podido eliminar.");
+      }
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
+    return resultRowsDeleted;
+  }
 }

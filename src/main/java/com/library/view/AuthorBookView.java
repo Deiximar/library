@@ -16,4 +16,8 @@ public class AuthorBookView {
     }
     return true;
   }
+
+  public void deleteAuthorBookByBookId(int id) {
+    authorsBooksController.deleteAuthorBookByBookId(id);  
+}
 }

@@ -4,8 +4,9 @@ import java.util.List;
 
 public interface BookDAOInterface {
 
-  List<Book> getBooks();
+  List<Book> getAllBooks();
 
   int addBook(Book book);
 
+  int deleteBookById(int id);
 }

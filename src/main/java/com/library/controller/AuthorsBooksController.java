@@ -14,4 +14,8 @@ public class AuthorsBooksController {
     boolean state = authorBookDAOInterface.addAuthorBook(authorId, bookId);
     return state;
   }
+
+  public void deleteAuthorBookByBookId(int id) {
+    authorBookDAOInterface.deleteAuthorBookByBookId(id);  
+}
 }
