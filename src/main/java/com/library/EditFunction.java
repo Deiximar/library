@@ -75,6 +75,8 @@ public void run() {
         }
         scanner.close();
     }
+
+
     private int showAllBooks(Scanner scanner) {
         return search("SELECT b.id_book, b.title, b.description, b.isbn_code, a.name || ' ' || a.last_name AS author " +
                 "FROM books b " +
@@ -102,14 +104,13 @@ public void run() {
                 "FROM books b " +
                 "INNER JOIN authors_books ab ON b.id_book = ab.id_book " +
                 "INNER JOIN authors a ON ab.id_author = a.id_author " +
-                "WHERE a.name = ? OR a.last_name = ?", authorName, authorLastName, true);
-    
+                "WHERE a.name = ? AND a.last_name = ?", authorName, authorLastName, true);
     }
 
-    private int editBookByGenre(Scanner scanner) {
-        System.out.println("¿Cuál es el Id del libro que quiere editar?:");
-        String bookId = scanner.nextLine();
-        return search("SELECT b.id_book, b.title, b.isbn_code, a.name || ' ' || a.last_name AS author " +
+     private int editBookByGenre(Scanner scanner) {
+        System.out.println("¿Cuál es el género del libro que quiere editar?:");
+        String bookGenre = scanner.nextLine();
+        return search("SELECT b.id_book, b.title, b.description, b.isbn_code, a.name || ' ' || a.last_name AS author " +
                 "FROM books b " +
                 "INNER JOIN genders_books gb ON b.id_book = gb.id_book " +
                 "INNER JOIN genders g ON gb.id_gender = g.id_gender " +
@@ -118,17 +119,14 @@ public void run() {
                 "WHERE g.gender = ?", bookGenre, true);
     }
 
-
     private int editBookById(Scanner scanner) {
-        System.out.println("¿Cuál es el Id del libro que quiere editar?:");
-        String bookIsbn = scanner.nextLine();
-        return search("SELECT b.id_book, b.title, b.isbn_code, a.name || ' ' || a.last_name AS author " +
+        System.out.println("¿Cuál es el ID del libro que quiere editar?:");
+        String bookId = scanner.nextLine();
+        return search("SELECT b.id_book, b.title, b.description, b.isbn_code, a.name || ' ' || a.last_name AS author " +
                 "FROM books b " +
-                "INNER JOIN genders_books gb ON b.id_book = gb.id_book " +
-                "INNER JOIN genders g ON gb.id_gender = g.id_gender " +
                 "LEFT JOIN authors_books ab ON b.id_book = ab.id_book " +
                 "LEFT JOIN authors a ON ab.id_author = a.id_author " +
-                "WHERE g.gender = ?", bookId, true);
+                "WHERE b.id_book = ?", bookId, true);
     }
 
 
@@ -147,7 +145,6 @@ public void run() {
 
     private int search(String query, String parameter, boolean includeDescription) {
         int count = 0;
-
         String format;
         if (includeDescription) {
             format = "| %-10d | %-30s | %-30s | %-40s | %-15s |%n";
@@ -159,7 +156,10 @@ public void run() {
             connect = DBManager.initConnection();
             preparedStatement = connect.prepareStatement(query);
 
-            preparedStatement.setString(1, parameter);
+            if (parameter != null) {
+                preparedStatement.setString(1, parameter);
+            }
+
             ResultSet resultSet = preparedStatement.executeQuery();
 
             // Imprimir encabezado de tabla
@@ -194,62 +194,17 @@ public void run() {
 
             System.out.format(
                     "+------------+--------------------------------+--------------------------------+------------------------------------------+-----------------+%n");
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
-        }
-        return count;
-    }
-
-    private int search(String query, String param1, String param2, boolean includeDescription) {
-        int count = 0;
-
-        String format;
-        if (includeDescription) {
-            format = "| %-10d | %-30s | %-30s | %-40s | %-15s |%n";
-        } else {
-            format = "| %-10d | %-30s | %-30s | %-15s |%n";
-        }
-
-        try {
-            connect = DBManager.initConnection();
-            preparedStatement = connect.prepareStatement(query);
-
-            preparedStatement.setString(1, param1);
-            preparedStatement.setString(2, param2);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            System.out.format(
-                    "+------------+--------------------------------+--------------------------------+------------------------------------------+-----------------+%n");
-            if (includeDescription) {
-                System.out.format(
-                        "| ID         | Título                         | Autor                          | Descripción                              | ISBN            |%n");
-            } else {
-                System.out.format(
-                        "| ID         | Título                         | Autor                          | ISBN            |%n");
+        } finally {
+            // Cierre de recursos
+            try {
+                if (preparedStatement != null) preparedStatement.close();
+                if (connect != null) connect.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
-            System.out.format(
-                    "+------------+--------------------------------+--------------------------------+------------------------------------------+-----------------+%n");
-
-            while (resultSet.next()) {
-                count++;
-                int id = resultSet.getInt("id_book");
-                String title = resultSet.getString("title");
-                String author = resultSet.getString("author");
-                String isbn = resultSet.getString("isbn_code");
-
-                String description = includeDescription ? resultSet.getString("description") : "";
-
-                if (includeDescription) {
-                    System.out.format(format, id, title, author, truncate(description, 40), isbn);
-                } else {
-                    System.out.format(format, id, title, author, isbn);
-                }
-            }
-
-            System.out.format(
-                    "+------------+--------------------------------+--------------------------------+------------------------------------------+-----------------+%n");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
         }
         return count;
     }
@@ -261,15 +216,4 @@ public void run() {
             return value.substring(0, length - 3) + "...";
         }
     }
-  }
-
-
-
-
-
-       
-
-
-
-    
-
+}
