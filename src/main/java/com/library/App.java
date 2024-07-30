@@ -33,7 +33,8 @@ public class App {
             } else {
                 switch (option) {
                     case 1:
-                        // showAllBooks();
+                        ShowAllBooks showAllBooks = new showAllBooks();
+                        showAllBooks.showAllBooks();
                         break;
                     case 2:
                         addBook();
