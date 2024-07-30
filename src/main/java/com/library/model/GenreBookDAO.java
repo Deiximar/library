@@ -15,7 +15,7 @@ public class GenreBookDAO implements GenreBookDAOInterface {
     try {
       connect = DBManager.initConnection();
       if (connect != null) {
-        String insertQuery = "INSERT INTO genders_books (id_book, id_gender) VALUES (?,?)";
+        String insertQuery = "INSERT INTO genres_books (id_book, id_genre) VALUES (?,?)";
         preparedStatement = connect.prepareStatement(insertQuery);
         preparedStatement.setInt(1, bookId);
         preparedStatement.setInt(2, genreId);
