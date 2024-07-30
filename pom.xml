@@ -35,6 +35,12 @@
       <artifactId>dotenv-java</artifactId>
       <version>3.0.0</version>
     </dependency>
+   <dependency>
+    <groupId>org.mockito</groupId>
+    <artifactId>mockito-inline</artifactId>
+    <version>5.0.0</version> <!-- Usa la versión compatible con tu entorno -->
+    <scope>test</scope>
+</dependency>
     </dependencies>
 
   <build>
