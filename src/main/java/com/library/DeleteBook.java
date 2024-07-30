@@ -15,20 +15,26 @@ public class DeleteBook {
     public void deleteBook(Scanner scanner) {
         ArrayList<Integer> bookIdList = showAllBooks();
         Boolean shouldAskId = true;
+        String RESET = "\033[0m";
         int idBook;
 
         while (shouldAskId) {
-            System.out.println("Escribe el ID del libro que deseas eliminar");
+            if (bookIdList.isEmpty()) {
+                System.out.println("\n\033[31mNo existen libros para eliminar" + RESET);
+                break;
+            }
+            System.out.println("\n\033[33mEscribe el ID del libro que deseas eliminar o escribe 0 para cancelar\n");
             idBook = scanner.nextInt();
             scanner.nextLine();
             if (idBook > 0 && bookIdList.contains(idBook)) {
                 shouldAskId = false;
-                System.out.println("El ID es válido");
+                System.out.println("\033[32mEl ID es válido\n"+ RESET);
                 deleteAuthorBookByBookId(idBook);
                 deleteGenresBookByBookId(idBook);
                 deleteBookById(idBook);
             } else {
-                System.out.println("El ID introducido no es válido");
+                System.out.println("\n\033[31mEl ID introducido no es válido" + RESET);
+                shouldAskId = false;
             }
         }
     }
@@ -59,6 +65,7 @@ public class DeleteBook {
     public int deleteBookById(int id) {
         String query = "DELETE FROM books WHERE id_book = ?";
         int resultRowsDeleted = 0;
+        String RESET = "\033[0m";
         try {
             connect = DBManager.initConnection();
             preparedStatement = connect.prepareStatement(query);
@@ -66,9 +73,9 @@ public class DeleteBook {
             preparedStatement.setInt(1, id);
             resultRowsDeleted = preparedStatement.executeUpdate();
             if (resultRowsDeleted > 0) {
-                System.out.println("Su libro se ha eliminado exitosamente!");
+                System.out.println("\n\033[32mSu libro se ha eliminado exitosamente!" + RESET);
             } else {
-                System.out.println("El libro no se ha podido eliminar.");
+                System.out.println("\n\033[31mEl libro no se ha podido eliminar.");
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -92,7 +99,7 @@ public class DeleteBook {
     }
 
     public int deleteGenresBookByBookId(int id) {
-        String query = "DELETE FROM genders_books WHERE id_book = ?";
+        String query = "DELETE FROM genres_books WHERE id_book = ?";
         int resultRowsDeleted = 0;
         try {
             connect = DBManager.initConnection();
