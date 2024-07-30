@@ -40,8 +40,7 @@ public class App {
                         // editBook();
                         break;
                     case 4:
-                        DeleteBook deleteBook = new DeleteBook();
-                        deleteBook.deleteBook(scanner);
+                        bookView.deleteBook(scanner);
                         break;
                     case 5:
                         SearchBooks searchBooks = new SearchBooks();

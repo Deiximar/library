@@ -6,6 +6,8 @@ public class Book {
   private String description;
   private String codeISBN;
 
+  public Book () {}
+
   public Book(String title, String description, String codeISBN) {
     this.title = title;
     this.description = description;
@@ -24,7 +26,7 @@ public class Book {
     return this.title;
   }
 
-  public void getTitle(String title) {
+  public void setTitle(String title) {
     this.title = title;
   }
 
