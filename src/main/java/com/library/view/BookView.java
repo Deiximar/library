@@ -49,11 +49,21 @@ public class BookView {
 
     System.out.println("\nPara añadir un libro ingrese los siguientes campos: \n");
     System.out.print("Título: ");
-    String title = scanner.nextLine();
-    System.out.print("Descripción: ");
-    String description = scanner.nextLine();
+    String title = scanner.nextLine().trim();
+    String description = "";
+
+    do {
+      System.out.print("Descripción: ");
+      description = scanner.nextLine().trim();
+      if (description.length() > 200) {
+        System.out.println("Introduzca un descripción con un máximo 200 caracteres.");
+        System.out.print("Descripción: ");
+        description = scanner.nextLine().trim();
+      }
+    } while (description.length() > 200);
+
     System.out.print("Código ISBN: ");
-    String codeISBN = scanner.nextLine();
+    String codeISBN = scanner.nextLine().trim();
 
     Book book = new Book(title, description, codeISBN);
     int bookId = booksController.addBook(book);
@@ -76,36 +86,36 @@ public class BookView {
   };
 
   public void deleteBook(Scanner scanner) {
-        List<Book> books = booksController.getAllBooks();
-        Boolean shouldAskId = true;
-        String RESET = "\033[0m";
-        int idBook;
-        boolean found = false;
+    List<Book> books = booksController.getAllBooks();
+    Boolean shouldAskId = true;
+    String RESET = "\033[0m";
+    int idBook;
+    boolean found = false;
 
-        for (Book book : books) {
-          System.out.println("ID: " + book.getIdBook() + ", Título: " + book.getTitle());
-        }
+    for (Book book : books) {
+      System.out.println("ID: " + book.getIdBook() + ", Título: " + book.getTitle());
+    }
 
-        while (shouldAskId) {
-            if (books.isEmpty()) {
-                System.out.println("\n\033[31mNo existen libros para eliminar" + RESET);
-                break;
-            }
-            System.out.println("\n\033[33mEscribe el ID del libro que deseas eliminar o escribe 0 para cancelar\n");
-            idBook = scanner.nextInt();
-            scanner.nextLine();
-            final int finalIdBook = idBook;
-            found = books.stream().anyMatch(book -> book.getIdBook() == finalIdBook);
-            if (idBook > 0 && found) {
-                shouldAskId = false;
-                System.out.println("\033[32mEl ID es válido\n"+ RESET);
-                genreBookView.deleteGenresBookByBookId(idBook);
-                authorBookView.deleteAuthorBookByBookId(idBook);
-                booksController.deleteBookById(idBook);
-            } else {
-                System.out.println("\n\033[31mEl ID introducido no es válido" + RESET);
-                shouldAskId = false;
-            }
-        }
+    while (shouldAskId) {
+      if (books.isEmpty()) {
+        System.out.println("\n\033[31mNo existen libros para eliminar" + RESET);
+        break;
+      }
+      System.out.println("\n\033[33mEscribe el ID del libro que deseas eliminar o escribe 0 para cancelar\n");
+      idBook = scanner.nextInt();
+      scanner.nextLine();
+      final int finalIdBook = idBook;
+      found = books.stream().anyMatch(book -> book.getIdBook() == finalIdBook);
+      if (idBook > 0 && found) {
+        shouldAskId = false;
+        System.out.println("\033[32mEl ID es válido\n" + RESET);
+        genreBookView.deleteGenresBookByBookId(idBook);
+        authorBookView.deleteAuthorBookByBookId(idBook);
+        booksController.deleteBookById(idBook);
+      } else {
+        System.out.println("\n\033[31mEl ID introducido no es válido" + RESET);
+        shouldAskId = false;
+      }
+    }
   }
 }
