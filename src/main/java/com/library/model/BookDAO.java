@@ -10,7 +10,7 @@ import java.sql.PreparedStatement;
 //import java.sql.Statement;
 import java.sql.ResultSet;
 
-public class BookDAO {
+public class BookDAO implements BookDAOInterface {
   private Connection connect;
   private PreparedStatement preparedStatement;
 
