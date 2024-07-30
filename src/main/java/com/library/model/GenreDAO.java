@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 import com.library.config.DBManager;
 
-public class GenreDAO {
+public class GenreDAO implements GenreDAOInterface {
 
   private Connection connect;
   private PreparedStatement preparedStatement;

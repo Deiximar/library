@@ -1,22 +1,20 @@
 package com.library;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
-import com.library.model.Author;
-import com.library.model.AuthorBookDAO;
-import com.library.model.AuthorDAO;
-import com.library.model.Book;
+import com.library.controller.BooksController;
 import com.library.model.BookDAO;
-import com.library.model.Genre;
-import com.library.model.GenreBookDAO;
-import com.library.model.GenreDAO;
+import com.library.model.BookDAOInterface;
+import com.library.view.BookView;
 
 public class App {
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
+
+        BookDAOInterface bookDao = new BookDAO();
+        BooksController booksController = new BooksController(bookDao);
+        BookView bookView = new BookView(booksController);
 
         System.out.println("\nBiblioteca de todos\n¿Qué desea realizar? (Selecione un número)");
 
@@ -36,7 +34,7 @@ public class App {
                         // showAllBooks();
                         break;
                     case 2:
-                        addBook();
+                        bookView.addBook(scanner);
                         break;
                     case 3:
                         // editBook();
@@ -58,6 +56,7 @@ public class App {
 
         scanner.close();
     }
+<<<<<<< HEAD
 
     public static void addBook() {
         scanner.nextLine();
@@ -183,3 +182,6 @@ public class App {
 
 
 
+=======
+}
+>>>>>>> origin/dev
