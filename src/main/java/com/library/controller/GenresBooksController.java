@@ -13,4 +13,8 @@ public class GenresBooksController {
     boolean state = genreBookDAOInterface.addGenreBook(genreId, bookId);
     return state;
   }
+
+  public void deleteGenresBookByBookId(int id) {
+    genreBookDAOInterface.deleteGenresBookByBookId(id);
+  }
 }
