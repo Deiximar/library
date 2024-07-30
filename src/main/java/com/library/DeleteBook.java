@@ -92,7 +92,7 @@ public class DeleteBook {
     }
 
     public int deleteGenresBookByBookId(int id) {
-        String query = "DELETE FROM genders_books WHERE id_book = ?";
+        String query = "DELETE FROM genres_books WHERE id_book = ?";
         int resultRowsDeleted = 0;
         try {
             connect = DBManager.initConnection();
