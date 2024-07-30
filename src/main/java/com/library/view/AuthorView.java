@@ -26,9 +26,9 @@ public class AuthorView {
     String addMore;
     do {
       System.out.print("Nombre del autor: ");
-      String authorName = scanner.nextLine();
+      String authorName = scanner.nextLine().trim();
       System.out.print("Apellido del autor: ");
-      String authorLastname = scanner.nextLine();
+      String authorLastname = scanner.nextLine().trim();
       authors.add(new Author(authorName, authorLastname));
       System.out.print("¿Desea agregar otro autor? (s/n): ");
       addMore = scanner.nextLine();
