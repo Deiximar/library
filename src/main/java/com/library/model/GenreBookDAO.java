@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 
 import com.library.config.DBManager;
 
-public class GenreBookDAO {
+public class GenreBookDAO implements GenreBookDAOInterface {
   private Connection connect;
   private PreparedStatement preparedStatement;
 

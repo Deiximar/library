@@ -1,22 +1,20 @@
 package com.library;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
-import com.library.model.Author;
-import com.library.model.AuthorBookDAO;
-import com.library.model.AuthorDAO;
-import com.library.model.Book;
+import com.library.controller.BooksController;
 import com.library.model.BookDAO;
-import com.library.model.Genre;
-import com.library.model.GenreBookDAO;
-import com.library.model.GenreDAO;
+import com.library.model.BookDAOInterface;
+import com.library.view.BookView;
 
 public class App {
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
+
+        BookDAOInterface bookDao = new BookDAO();
+        BooksController booksController = new BooksController(bookDao);
+        BookView bookView = new BookView(booksController);
 
         System.out.println("\nBiblioteca de todos\n¿Qué desea realizar? (Selecione un número)");
 
@@ -36,7 +34,7 @@ public class App {
                         // showAllBooks();
                         break;
                     case 2:
-                        addBook();
+                        bookView.addBook(scanner);
                         break;
                     case 3:
                         // editBook();
@@ -58,96 +56,4 @@ public class App {
 
         scanner.close();
     }
-
-    public static void addBook() {
-        scanner.nextLine();
-        BookDAO bookModel = new BookDAO();
-        AuthorDAO authorModel = new AuthorDAO();
-        GenreDAO genreModel = new GenreDAO();
-        AuthorBookDAO authorBookModel = new AuthorBookDAO();
-        GenreBookDAO genreBookModel = new GenreBookDAO();
-
-        System.out.println("\nPara añadir un libro ingrese los siguientes campos: ");
-
-        System.out.print("Título: ");
-        String title = scanner.nextLine();
-
-        System.out.print("Descripción: ");
-        String description = scanner.nextLine();
-
-        System.out.print("Código ISBN: ");
-        String codeISBN = scanner.nextLine();
-
-        Book book = new Book(title, description, codeISBN);
-        int bookId = bookModel.addBook(book);
-
-        if (bookId > 0) {
-            List<Author> authors = new ArrayList<>();
-            List<Genre> genres = new ArrayList<>();
-
-            String addMore;
-
-            do {
-                System.out.print("Nombre del autor: ");
-                String authorName = scanner.nextLine();
-
-                System.out.print("Apellido del autor: ");
-                String authorLastname = scanner.nextLine();
-
-                authors.add(new Author(authorName, authorLastname));
-
-                System.out.print("¿Desea agregar otro autor? (s/n): ");
-                addMore = scanner.nextLine();
-            } while (addMore.equalsIgnoreCase("s"));
-
-            do {
-                System.out.print("Género: ");
-                String genreBook = scanner.nextLine();
-
-                genres.add(new Genre(genreBook));
-
-                System.out.print("¿Desea agregar otro género? (s/n): ");
-                addMore = scanner.nextLine();
-            } while (addMore.equalsIgnoreCase("s"));
-
-            boolean success = true;
-
-            for (Author author : authors) {
-                int authorId = authorModel.addAuthor(author);
-                if (authorId > 0) {
-                    if (!authorBookModel.addAuthorBook(authorId, bookId)) {
-                        success = true;
-                        System.out.println("Fallo al asociar autor con el libro.");
-                    }
-                } else {
-                    success = true;
-                    System.out.println("Fallo al añadir autor.");
-                }
-            }
-
-            for (Genre genre : genres) {
-                int genreId = genreModel.addGenre(genre);
-                if (genreId > 0) {
-                    if (!genreBookModel.addGenreBook(genreId, bookId)) {
-                        success = true;
-                        System.out.println("Fallo al asociar género con el libro.");
-                    }
-                } else {
-                    success = true;
-                    System.out.println("Fallo al añadir género.");
-                }
-            }
-
-            if (success) {
-                System.out.println("Se ha añadido un libro correctamente!");
-            } else {
-                System.out.println(
-                        "Se ha añadido un libro, pero la no se asociaron los autores o géneros correctamente!");
-            }
-
-        } else {
-            System.out.println("Fallo al añadir libro.");
-        }
-    }
-
 }
