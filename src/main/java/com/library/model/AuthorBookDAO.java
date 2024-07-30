@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 
 import com.library.config.DBManager;
 
-public class AuthorBookDAO {
+public class AuthorBookDAO implements AuthorBookDAOInterface {
   private Connection connect;
   private PreparedStatement preparedStatement;
 
@@ -41,4 +41,19 @@ public class AuthorBookDAO {
     }
     return state;
   }
+
+  public int deleteAuthorBookByBookId(int id) {
+    String query = "DELETE FROM authors_books WHERE id_book = ?";
+    int resultRowsDeleted = 0;
+    try {
+        connect = DBManager.initConnection();
+        preparedStatement = connect.prepareStatement(query);
+
+        preparedStatement.setInt(1, id);
+        resultRowsDeleted = preparedStatement.executeUpdate();
+    } catch (Exception e) {
+        System.out.println(e.getMessage());
+    }
+    return resultRowsDeleted;
+}
 }

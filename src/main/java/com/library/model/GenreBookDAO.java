@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 
 import com.library.config.DBManager;
 
-public class GenreBookDAO {
+public class GenreBookDAO implements GenreBookDAOInterface {
   private Connection connect;
   private PreparedStatement preparedStatement;
 
@@ -15,7 +15,7 @@ public class GenreBookDAO {
     try {
       connect = DBManager.initConnection();
       if (connect != null) {
-        String insertQuery = "INSERT INTO genders_books (id_book, id_gender) VALUES (?,?)";
+        String insertQuery = "INSERT INTO genres_books (id_book, id_genre) VALUES (?,?)";
         preparedStatement = connect.prepareStatement(insertQuery);
         preparedStatement.setInt(1, bookId);
         preparedStatement.setInt(2, genreId);
@@ -42,4 +42,19 @@ public class GenreBookDAO {
     }
     return state;
   }
+
+  public int deleteGenresBookByBookId(int id) {
+    String query = "DELETE FROM genres_books WHERE id_book = ?";
+    int resultRowsDeleted = 0;
+    try {
+        connect = DBManager.initConnection();
+        preparedStatement = connect.prepareStatement(query);
+
+        preparedStatement.setInt(1, id);
+        resultRowsDeleted = preparedStatement.executeUpdate();
+    } catch (Exception e) {
+        System.out.println(e.getMessage());
+    }
+    return resultRowsDeleted;
+}
 }

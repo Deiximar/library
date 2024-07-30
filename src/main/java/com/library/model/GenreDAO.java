@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 import com.library.config.DBManager;
 
-public class GenreDAO {
+public class GenreDAO implements GenreDAOInterface {
 
   private Connection connect;
   private PreparedStatement preparedStatement;
@@ -21,7 +21,7 @@ public class GenreDAO {
     try {
       connect = DBManager.initConnection();
       if (connect != null) {
-        String insertQuery = "INSERT INTO genders(gender) VALUES (?)";
+        String insertQuery = "INSERT INTO genres(genre) VALUES (?)";
         preparedStatement = connect.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS);
         preparedStatement.setString(1, genre.getGenre());
         int rowsAffected = preparedStatement.executeUpdate();
@@ -60,13 +60,13 @@ public class GenreDAO {
     try {
       connect = DBManager.initConnection();
       if (connect != null) {
-        String selectQuery = "SELECT id_gender FROM genders WHERE gender = ?";
+        String selectQuery = "SELECT id_genre FROM genres WHERE genre = ?";
         preparedStatement = connect.prepareStatement(selectQuery);
         preparedStatement.setString(1, genre);
         resultSet = preparedStatement.executeQuery();
 
         if (resultSet.next()) {
-          genreId = resultSet.getInt("id_gender");
+          genreId = resultSet.getInt("id_genre");
         }
       } else {
         System.out.println("Conexión a la base de datos fallida");

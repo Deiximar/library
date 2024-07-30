@@ -40,7 +40,7 @@ public class SearchBooks {
                     found = count > 0;
                     break;
                 case 3:
-                    count = searchBookByGender(scanner);
+                    count = searchBookByGenre(scanner);
                     found = count > 0;
                     break;
                 default:
@@ -80,16 +80,16 @@ public class SearchBooks {
                 "WHERE a.name = ? OR a.last_name = ?", authorName, authorLastName, true);
     }
 
-    int searchBookByGender(Scanner scanner) {
+    int searchBookByGenre(Scanner scanner) {
         System.out.println("¿Cuál es el género del libro que quiere buscar?:");
-        String bookGender = scanner.nextLine();
+        String bookGenre = scanner.nextLine();
         return search("SELECT b.id_book, b.title, b.isbn_code, a.name || ' ' || a.last_name AS author " +
                 "FROM books b " +
-                "INNER JOIN genders_books gb ON b.id_book = gb.id_book " +
-                "INNER JOIN genders g ON gb.id_gender = g.id_gender " +
+                "INNER JOIN genres_books gb ON b.id_book = gb.id_book " +
+                "INNER JOIN genres g ON gb.id_genre = g.id_genre " +
                 "LEFT JOIN authors_books ab ON b.id_book = ab.id_book " +
                 "LEFT JOIN authors a ON ab.id_author = a.id_author " +
-                "WHERE g.gender = ?", bookGender, false);
+                "WHERE g.genre = ?", bookGenre, false);
     }
 
     private int search(String query, String parameter, boolean includeDescription) {

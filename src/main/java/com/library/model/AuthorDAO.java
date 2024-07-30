@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 import com.library.config.DBManager;
 
-public class AuthorDAO {
+public class AuthorDAO implements AuthorDAOInterface {
 
   private Connection connect;
   private PreparedStatement preparedStatement;

@@ -141,7 +141,7 @@ public class SearchBooksTest {
 
     // Llama al método de prueba
     Scanner scanner = new Scanner(testGender);
-    int count = searchBooks.searchBookByGender(scanner);
+    int count = searchBooks.searchBookByGenre(scanner);
 
     // Verifica el resultado esperado
     assertEquals(1, count);
