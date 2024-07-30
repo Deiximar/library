@@ -1,6 +1,9 @@
-package com.library;
+package com.library.model;
 
 import java.sql.Statement;
+
+import com.library.config.DBManager;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 //import java.sql.ResultSet;
@@ -9,14 +12,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class BookDAO {
+  private Connection connect;
+  private PreparedStatement preparedStatement;
 
   public int addBook(Book book) {
     int bookId = -1;
-    Cconnection connection = new Cconnection();
-    Connection connect = null;
-    PreparedStatement preparedStatement = null;
+
     try {
-      connect = connection.setConnection();
+      connect = DBManager.initConnection();
 
       if (connect != null) {
         String insertQuery = "INSERT INTO books (title, description, isbn_code) VALUES (?,?,?)";
@@ -60,7 +63,9 @@ public class BookDAO {
   }
    public boolean updateBook(Book book) {
         boolean state = false;
-        try (Connection connection = new Cconnection().setConnection()) {
+        try {
+          Connection connection = DBManager.initConnection();
+
             if (connection != null) {
                 String updateQuery = "UPDATE books SET title = ?, description = ?, isbn_code = ? WHERE id_book = ?";
                 try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
@@ -82,7 +87,8 @@ public class BookDAO {
 
     public Book getBookById(int id) {
         Book book = null;
-        try (Connection connection = new Cconnection().setConnection()) {
+        try {
+          Connection connection = DBManager.initConnection();
             if (connection != null) {
                 String selectQuery = "SELECT * FROM books WHERE id_book = ?";
                 try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {

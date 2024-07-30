@@ -1,4 +1,4 @@
-package com.library;
+package com.library.model;
 
 public class Author {
     private int idAuthor;
@@ -14,9 +14,13 @@ public class Author {
         return this.idAuthor;
     }
 
-    public String getName() {
-        return this.name;
-    }
+  public void setIdAuthor(int idAuthor) {
+    this.idAuthor = idAuthor;
+  }
+
+  public String getName() {
+    return this.name;
+  }
 
   public void setName(String name) {
     this.name = name;

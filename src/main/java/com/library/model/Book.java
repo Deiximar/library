@@ -1,11 +1,10 @@
-package com.library;
+package com.library.model;
 
 public class Book {
   private int idBook;
   private String title;
   private String description;
   private String codeISBN;
-  
 
   public Book(String title, String description, String codeISBN) {
     this.title = title;
@@ -20,6 +19,7 @@ public class Book {
 public void setIdBook(int idBook) {
     this.idBook = idBook;
 }
+
 
   public String getTitle() {
     return this.title;

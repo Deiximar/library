@@ -1,28 +1,30 @@
-package com.library;
+package com.library.model;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
-public class AuthorBookDAO {
+import com.library.config.DBManager;
 
-  public boolean addAuthorBook(int authorId, int bookId) {
+public class GenreBookDAO {
+  private Connection connect;
+  private PreparedStatement preparedStatement;
+
+  public boolean addGenreBook(int genreId, int bookId) {
     boolean state = false;
-    Cconnection connection = new Cconnection();
-    Connection connect = null;
-    PreparedStatement preparedStatement = null;
 
     try {
-      connect = connection.setConnection();
+      connect = DBManager.initConnection();
       if (connect != null) {
-        String insertQuery = "INSERT INTO authors_books (id_book, id_author) VALUES (?,?)";
+        String insertQuery = "INSERT INTO genders_books (id_book, id_gender) VALUES (?,?)";
         preparedStatement = connect.prepareStatement(insertQuery);
         preparedStatement.setInt(1, bookId);
-        preparedStatement.setInt(2, authorId);
+        preparedStatement.setInt(2, genreId);
         int rowsAffected = preparedStatement.executeUpdate();
         state = rowsAffected > 0;
       } else {
         System.out.println("Conexión a la base de datos fallida");
       }
+
     } catch (Exception e) {
       System.out.println(e.getMessage());
 
