@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.library.config.DBManager;
 
@@ -11,6 +13,28 @@ public class GenreDAO implements GenreDAOInterface {
 
   private Connection connect;
   private PreparedStatement preparedStatement;
+
+  public List<Genre> getGenres(int idBook) {
+    List<Genre> genres = new ArrayList<>();
+    String query = "SELECT * FROM genres WHERE id_book = " + idBook;
+
+    try {
+      connect = DBManager.initConnection();
+      preparedStatement = connect.prepareStatement(query);
+      ResultSet resultSet = preparedStatement.executeQuery();
+
+      while (resultSet.next()) {
+        Genre genre = new Genre();
+        genre.setIdGenre(resultSet.getInt("id_genre"));
+        genre.setGenre(resultSet.getString("genre"));
+        genres.add(genre);
+      }
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
+
+    return genres;
+  }
 
   public int addGenre(Genre genre) {
     int genreId = findGenreByName(genre.getGenre());

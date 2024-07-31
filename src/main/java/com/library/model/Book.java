@@ -1,12 +1,14 @@
 package com.library.model;
 
+import java.util.List;
+
 public class Book {
   private int idBook;
   private String title;
   private String description;
   private String codeISBN;
-  private Author author; // Nueva relación con Author
-  private Genre genre; // Nueva relación con Genre
+  private List<Author> authors;
+  private List<Genre> genres;
 
   public Book() {
   }
@@ -49,20 +51,20 @@ public class Book {
     this.codeISBN = codeISBN;
   }
 
-  public Genre getGenre() {
-    return genre;
+  public List<Author> getAuthors() {
+    return authors;
   }
 
-  public void setGenre(Genre genre) {
-    this.genre = genre;
+  public void setAuthors(List<Author> authors) {
+    this.authors = authors;
   }
 
-  public Author getAuthor() {
-    return author;
+  public List<Genre> getGenres() {
+    return genres;
   }
 
-  public void setAuthor(Author author) {
-    this.author = author;
+  public void setGenres(List<Genre> genres) {
+    this.genres = genres;
   }
 
 }

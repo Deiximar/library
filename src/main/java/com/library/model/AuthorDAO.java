@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.library.config.DBManager;
 
@@ -11,6 +13,29 @@ public class AuthorDAO implements AuthorDAOInterface {
 
   private Connection connect;
   private PreparedStatement preparedStatement;
+
+  public List<Author> getAuthors(int idBook) {
+    List<Author> authors = new ArrayList<>();
+    String query = "SELECT * FROM authors WHERE id_book = " + idBook;
+
+    try {
+      connect = DBManager.initConnection();
+      preparedStatement = connect.prepareStatement(query);
+      ResultSet resultSet = preparedStatement.executeQuery();
+
+      while (resultSet.next()) {
+        Author author = new Author();
+        author.setIdAuthor(resultSet.getInt("id_book"));
+        author.setName(resultSet.getString("name"));
+        author.setLastName(resultSet.getString("last_name"));
+        authors.add(author);
+      }
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
+
+    return authors;
+  }
 
   public int addAuthor(Author author) {
     int authorId = findAuthorByName(author.getName(), author.getLastName());

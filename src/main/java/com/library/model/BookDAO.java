@@ -1,44 +1,21 @@
 package com.library.model;
 
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.library.config.DBManager;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-//import java.sql.ResultSet;
-//import java.sql.Statement;
-import java.sql.ResultSet;
 
 public class BookDAO implements BookDAOInterface {
   private Connection connect;
   private PreparedStatement preparedStatement;
 
   public List<Book> getAllBooks() {
+
+    String query = "SELECT * FROM books";
     List<Book> books = new ArrayList<>();
-
-    // String query = "SELECT "
-    // + "b.id AS book_id, "
-    // + "b.title, "
-    // + "b.isbn_code, "
-    // + "a.name AS author_name, "
-    // + "a.last_name AS author_last_name, "
-    // + "g.genre "
-    // + "FROM "
-    // + "public.books b "
-    // + "LEFT JOIN "
-    // + "public.authors_books ab ON b.id = ab.id_book "
-    // + "LEFT JOIN "
-    // + "public.authors a ON ab.id_author = a.id "
-    // + "LEFT JOIN "
-    // + "public.genres_books gb ON b.id = gb.id_book "
-    // + "LEFT JOIN "
-    // + "public.genres g ON gb.id_genre = g.id;";
-
-    String query = "SELECT b.id, b.title, b.description, b.isbn_code " +
-        "FROM books b ";
 
     try {
       connect = DBManager.initConnection();
@@ -46,26 +23,45 @@ public class BookDAO implements BookDAOInterface {
 
       ResultSet resultSet = preparedStatement.executeQuery();
 
+      // Map<Integer, Book> bookMap = new HashMap<>();
+
       while (resultSet.next()) {
         Book book = new Book();
-        book.setIdBook(resultSet.getInt("id"));
+        book.setIdBook(resultSet.getInt("id_book"));
         book.setTitle(resultSet.getString("title"));
         book.setDescription(resultSet.getString("description"));
-        book.setCodeISBN(resultSet.getString("isbn_code"));
-
-        // Author author = new Author();
-        // author.setIdAuthor(resultSet.getInt("id_author"));
-        // author.setName(resultSet.getString("author_name"));
-        // author.setLastName(resultSet.getString("last_name"));
-        // book.setAuthor(author);
-
-        // Genre genre = new Genre();
-        // genre.setIdGenre(resultSet.getInt("id_genre"));
-        // genre.setGenre(resultSet.getString("genre"));
-        // book.setGenre(genre);
-
         books.add(book);
       }
+
+      // while (resultSet.next()) {
+      // int bookId = resultSet.getInt("id_book");
+      // Book book = bookMap.getOrDefault(bookId, new Book());
+      // book.setIdBook(bookId);
+      // book.setTitle(resultSet.getString("title"));
+      // book.setCodeISBN(resultSet.getString("isbn_code"));
+
+      // if (!bookMap.containsKey(bookId)) {
+      // book.setAuthors(new ArrayList<>());
+      // book.setGenres(new ArrayList<>());
+      // bookMap.put(bookId, book);
+      // }
+      // int authorId = resultSet.getInt("id_author");
+      // if (authorId != 0) {
+      // Author author = new Author();
+      // author.setIdAuthor(authorId);
+      // author.setName(resultSet.getString("name"));
+      // author.setLastName(resultSet.getString("last_name"));
+      // book.getAuthors().add(author);
+      // }
+
+      // int genreId = resultSet.getInt("id_genre");
+      // if (genreId != 0) {
+      // Genre genre = new Genre();
+      // genre.setIdGenre(genreId);
+      // genre.setGenre(resultSet.getString("genre"));
+      // book.getGenres().add(genre);
+      // }
+      // }
     } catch (Exception e) {
       System.out.println(e.getMessage());
     }

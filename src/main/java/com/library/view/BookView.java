@@ -14,6 +14,7 @@ import com.library.model.AuthorBookDAOInterface;
 import com.library.model.AuthorDAO;
 import com.library.model.AuthorDAOInterface;
 import com.library.model.Book;
+import com.library.model.BookDAO;
 import com.library.model.Genre;
 import com.library.model.GenreBookDAO;
 import com.library.model.GenreBookDAOInterface;
@@ -44,6 +45,31 @@ public class BookView {
     this.booksController = booksController;
   }
 
+  public void showAllBooks() {
+    List<Book> books = booksController.getAllBooks();
+    List<Author> authors = new ArrayList<>();
+
+    // for (Author author : book.getAuthors()) {
+    // Author newAuthor;
+    // newAuthor.setIdAuthor(author.getIdAuthor());
+    // newAuthor.setName(author.getName());
+    // newAuthor.setLastName(author.getLastName());
+    // }
+
+    System.out.printf("%-10s %-20s %-20s %-20s %-15s %-15s\n", "ID", "Título", "Autor", "Apellido", "ISBN", "Género");
+    // for (Book book : books) {
+    // System.out.printf("%-10d %-20s %-20s %-20s %-15s %-15s\n",
+    // book.getIdBook(),
+    // book.getTitle(),
+
+    // book.getAuthors().getName(),
+    // book.getAuthors().getLastName(),
+    // book.getCodeISBN(),
+    // book.getGenres().getGenres());
+    // }
+
+  }
+
   public void addBook(Scanner scanner) {
     scanner.nextLine();
 
@@ -56,6 +82,7 @@ public class BookView {
     String codeISBN = scanner.nextLine();
 
     Book book = new Book(title, description, codeISBN);
+
     int bookId = booksController.addBook(book);
 
     if (bookId > 0) {
@@ -76,36 +103,36 @@ public class BookView {
   };
 
   public void deleteBook(Scanner scanner) {
-        List<Book> books = booksController.getAllBooks();
-        Boolean shouldAskId = true;
-        String RESET = "\033[0m";
-        int idBook;
-        boolean found = false;
+    List<Book> books = booksController.getAllBooks();
+    Boolean shouldAskId = true;
+    String RESET = "\033[0m";
+    int idBook;
+    boolean found = false;
 
-        for (Book book : books) {
-          System.out.println("ID: " + book.getIdBook() + ", Título: " + book.getTitle());
-        }
+    for (Book book : books) {
+      System.out.println("ID: " + book.getIdBook() + ", Título: " + book.getTitle());
+    }
 
-        while (shouldAskId) {
-            if (books.isEmpty()) {
-                System.out.println("\n\033[31mNo existen libros para eliminar" + RESET);
-                break;
-            }
-            System.out.println("\n\033[33mEscribe el ID del libro que deseas eliminar o escribe 0 para cancelar\n");
-            idBook = scanner.nextInt();
-            scanner.nextLine();
-            final int finalIdBook = idBook;
-            found = books.stream().anyMatch(book -> book.getIdBook() == finalIdBook);
-            if (idBook > 0 && found) {
-                shouldAskId = false;
-                System.out.println("\033[32mEl ID es válido\n"+ RESET);
-                genreBookView.deleteGenresBookByBookId(idBook);
-                authorBookView.deleteAuthorBookByBookId(idBook);
-                booksController.deleteBookById(idBook);
-            } else {
-                System.out.println("\n\033[31mEl ID introducido no es válido" + RESET);
-                shouldAskId = false;
-            }
-        }
+    while (shouldAskId) {
+      if (books.isEmpty()) {
+        System.out.println("\n\033[31mNo existen libros para eliminar" + RESET);
+        break;
+      }
+      System.out.println("\n\033[33mEscribe el ID del libro que deseas eliminar o escribe 0 para cancelar\n");
+      idBook = scanner.nextInt();
+      scanner.nextLine();
+      final int finalIdBook = idBook;
+      found = books.stream().anyMatch(book -> book.getIdBook() == finalIdBook);
+      if (idBook > 0 && found) {
+        shouldAskId = false;
+        System.out.println("\033[32mEl ID es válido\n" + RESET);
+        genreBookView.deleteGenresBookByBookId(idBook);
+        authorBookView.deleteAuthorBookByBookId(idBook);
+        booksController.deleteBookById(idBook);
+      } else {
+        System.out.println("\n\033[31mEl ID introducido no es válido" + RESET);
+        shouldAskId = false;
+      }
+    }
   }
 }
