@@ -8,13 +8,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Scanner;
 
-
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
-
 
 import com.library.config.DBManager;
 
@@ -32,123 +32,102 @@ public class SearchBooksTest {
     @Mock
     private ResultSet mockResultSet;
 
+    private static MockedStatic<DBManager> mockedDBManager;
+
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         MockitoAnnotations.openMocks(this);
-        mockStatic(DBManager.class);
-        when(DBManager.initConnection()).thenReturn(mockConnection);
+        if (mockedDBManager == null) {
+            mockedDBManager = mockStatic(DBManager.class);
+            mockedDBManager.when(DBManager::initConnection).thenReturn(mockConnection);
+        }
     }
 
- 
+    @After
+    public void tearDown() {
+        if (mockedDBManager != null) {
+            mockedDBManager.close();
+            mockedDBManager = null;
+        }
+    }
+
+    private void setupResultSet(String title, String author, String isbn, String description) throws Exception {
+        when(mockResultSet.next()).thenReturn(true).thenReturn(false);
+        when(mockResultSet.getInt("id_book")).thenReturn(1);
+        when(mockResultSet.getString("title")).thenReturn(title);
+        when(mockResultSet.getString("author")).thenReturn(author);
+        when(mockResultSet.getString("isbn_code")).thenReturn(isbn);
+        when(mockResultSet.getString("description")).thenReturn(description);
+    }
+
     @Test
     public void testSearchBookByTitle() throws Exception {
-        // Datos de prueba
-        String testTitle = "Test Book";
-    
-        // Consulta SQL
+        String testTitle = "Japan Book";
         String query = "SELECT b.id_book, b.title, b.description, b.isbn_code, a.name || ' ' || a.last_name AS author " +
                 "FROM books b " +
                 "LEFT JOIN authors_books ab ON b.id_book = ab.id_book " +
                 "LEFT JOIN authors a ON ab.id_author = a.id_author " +
                 "WHERE b.title = ?";
-    
-        // Configuración de mocks
+
         when(mockConnection.prepareStatement(query)).thenReturn(mockPreparedStatement);
         when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
-    
-        // Configuración del ResultSet para que devuelva los datos esperados
-        when(mockResultSet.next()).thenReturn(true).thenReturn(false);
-        when(mockResultSet.getInt("id_book")).thenReturn(1);
-        when(mockResultSet.getString("title")).thenReturn("Test Book");
-        when(mockResultSet.getString("author")).thenReturn("Author Name");
-        when(mockResultSet.getString("isbn_code")).thenReturn("1234567890");
-        when(mockResultSet.getString("description")).thenReturn("This is a test book description");
-    
-        // Llama al método de prueba
+
+        setupResultSet("Japan Book", "Author Name", "1234569780", "Book to learn Japan");
+
         Scanner scanner = new Scanner(testTitle);
         int count = searchBooks.searchBookByTitle(scanner);
-    
-        // Verifica el resultado esperado
+
         assertEquals(1, count);
-    
-        // Verifica que el parámetro se haya establecido correctamente
         verify(mockPreparedStatement).setString(1, testTitle);
     }
 
     @Test
     public void testSearchBookByAuthor() throws Exception {
-      // Datos de prueba
-      String testAuthor = "John Doe";
-      String[] nameParts = testAuthor.split(" ");
-      String authorName = nameParts[0];
-      String authorLastName = nameParts.length > 1 ? nameParts[1] : "";
+        String testAuthor = "J.R.R. Tolkien";
+        String[] nameParts = testAuthor.split(" ");
+        String authorName = nameParts[0];
+        String authorLastName = nameParts.length > 1 ? nameParts[1] : "";
 
-      // Consulta SQL
-      String query = "SELECT b.id_book, b.title, b.description, b.isbn_code, a.name || ' ' || a.last_name AS author " +
-              "FROM books b " +
-              "INNER JOIN authors_books ab ON b.id_book = ab.id_book " +
-              "INNER JOIN authors a ON ab.id_author = a.id_author " +
-              "WHERE a.name = ? OR a.last_name = ?";
+        String query = "SELECT b.id_book, b.title, b.description, b.isbn_code, a.name || ' ' || a.last_name AS author " +
+                "FROM books b " +
+                "INNER JOIN authors_books ab ON b.id_book = ab.id_book " +
+                "INNER JOIN authors a ON ab.id_author = a.id_author " +
+                "WHERE a.name = ? OR a.last_name = ?";
 
-      // Configuración de mocks
-      when(mockConnection.prepareStatement(query)).thenReturn(mockPreparedStatement);
-      when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
+        when(mockConnection.prepareStatement(query)).thenReturn(mockPreparedStatement);
+        when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
 
-      // Configuración del ResultSet para que devuelva los datos esperados
-      when(mockResultSet.next()).thenReturn(true).thenReturn(false);
-      when(mockResultSet.getInt("id_book")).thenReturn(1);
-      when(mockResultSet.getString("title")).thenReturn("Book by John Doe");
-      when(mockResultSet.getString("author")).thenReturn("John Doe");
-      when(mockResultSet.getString("isbn_code")).thenReturn("0987654321");
+        setupResultSet("Book by J.R.R. Tolkien", "J.R.R. Tolkien", "098765555", null);
 
-      // Llama al método de prueba
-      Scanner scanner = new Scanner(testAuthor);
-      int count = searchBooks.searchBookByAuthor(scanner);
+        Scanner scanner = new Scanner(testAuthor);
+        int count = searchBooks.searchBookByAuthor(scanner);
 
-      // Verifica el resultado esperado
-      assertEquals(1, count);
+        assertEquals(1, count);
+        verify(mockPreparedStatement).setString(1, authorName);
+        verify(mockPreparedStatement).setString(2, authorLastName);
+    }
 
-      // Verifica que los parámetros se hayan establecido correctamente
-      verify(mockPreparedStatement).setString(1, authorName);
-      verify(mockPreparedStatement).setString(2, authorLastName);
-  }
+   @Test
+    public void testSearchBookByGenre() throws Exception {
+        String testGenre = "Comic";
 
-  @Test
- 
-  public void testSearchBookByGender() throws Exception {
-    // Datos de prueba
-    String testGender = "Fiction";
+        String query = "SELECT b.id_book, b.title, b.isbn_code, a.name || ' ' || a.last_name AS author " +
+                "FROM books b " +
+                "INNER JOIN genres_books gb ON b.id_book = gb.id_book " +
+                "INNER JOIN genres g ON gb.id_genre = g.id_genre " +
+                "LEFT JOIN authors_books ab ON b.id_book = ab.id_book " +
+                "LEFT JOIN authors a ON ab.id_author = a.id_author " +
+                "WHERE g.genre = ?";
 
-    // Consulta SQL
-    String query = "SELECT b.id_book, b.title, b.isbn_code, a.name || ' ' || a.last_name AS author " +
-            "FROM books b " +
-            "INNER JOIN genders_books gb ON b.id_book = gb.id_book " +
-            "INNER JOIN genders g ON gb.id_gender = g.id_gender " +
-            "LEFT JOIN authors_books ab ON b.id_book = ab.id_book " +
-            "LEFT JOIN authors a ON ab.id_author = a.id_author " +
-            "WHERE g.gender = ?";
+        when(mockConnection.prepareStatement(query)).thenReturn(mockPreparedStatement);
+        when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
 
-    // Configuración de mocks
-    when(mockConnection.prepareStatement(query)).thenReturn(mockPreparedStatement);
-    when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
+        setupResultSet("Comic Book", "Author Name", "11223355894", null);
 
-    // Configuración del ResultSet para que devuelva los datos esperados
-    when(mockResultSet.next()).thenReturn(true).thenReturn(false);
-    when(mockResultSet.getInt("id_book")).thenReturn(1);
-    when(mockResultSet.getString("title")).thenReturn("Fiction Book");
-    when(mockResultSet.getString("author")).thenReturn("Author Name");
-    when(mockResultSet.getString("isbn_code")).thenReturn("1122334455");
+        Scanner scanner = new Scanner(testGenre);
+        int count = searchBooks.searchBookByGenre(scanner);
 
-    // Llama al método de prueba
-    Scanner scanner = new Scanner(testGender);
-    int count = searchBooks.searchBookByGenre(scanner);
-
-    // Verifica el resultado esperado
-    assertEquals(1, count);
-
-    // Verifica que el parámetro se haya establecido correctamente
-    verify(mockPreparedStatement).setString(1, testGender);
-}
-
-
+        assertEquals(1, count);
+        verify(mockPreparedStatement).setString(1, testGenre);
+    }
 }
