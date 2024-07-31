@@ -16,4 +16,8 @@ public class GenreBookView {
     }
     return true;
   }
+
+  public void deleteGenresBookByBookId(int id) {
+    genresBooksController.deleteGenresBookByBookId(id);
+  }
 }
