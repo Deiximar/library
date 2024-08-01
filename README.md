@@ -37,11 +37,11 @@ Este proyecto busca modernizar la gestión de una biblioteca local mediante un s
 
 ## 💻 Tecnologías y Herramientas
 
-- **Lenguaje:** Java 17
-- **Base de Datos:** PostgreSQL
-- **IDE:** Visual Studio Code
-- **Gestión de Proyectos:** Trello
-- **Control de Versiones:** Git / GitHub
+- **Lenguaje:** [Java 17](https://www.oracle.com/java/technologies/javase-downloads.html)
+- **Base de Datos:** [PostgreSQL](https://www.postgresql.org/)
+- **IDE:** [Visual Studio Code](https://code.visualstudio.com/)
+- **Gestión de Proyectos:** [Trello](https://trello.com/) o [Jira](https://www.atlassian.com/software/jira)
+- **Control de Versiones:** [Git](https://git-scm.com/) / [GitHub](https://github.com/)
 
 ## 📹 Demo 
 
