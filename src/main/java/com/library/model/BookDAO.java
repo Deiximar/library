@@ -31,6 +31,8 @@ public class BookDAO implements BookDAOInterface {
         Book book = new Book();
         book.setIdBook(resultSet.getInt("id_book"));
         book.setTitle(resultSet.getString("title"));
+        book.setDescription(resultSet.getString("description"));
+        book.setCodeISBN(resultSet.getString("isbn_code"));
         books.add(book);
       }
     } catch (Exception e) {
@@ -107,18 +109,17 @@ public class BookDAO implements BookDAOInterface {
     return resultRowsDeleted;
   }
 
-  public boolean updateBook(Book book) {
+  public boolean updateBookByField(String field, String fieldValue, int bookId) {
     boolean state = false;
     try {
       Connection connection = DBManager.initConnection();
 
       if (connection != null) {
-        String updateQuery = "UPDATE books SET title = ?, description = ?, isbn_code = ? WHERE id_book = ?";
+        String updateQuery = "UPDATE books SET " + field + " = ? WHERE id_book = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
-          preparedStatement.setString(1, book.getTitle());
-          preparedStatement.setString(2, book.getDescription());
-          preparedStatement.setString(3, book.getCodeISBN());
-          preparedStatement.setInt(4, book.getIdBook());
+          preparedStatement.setString(1, fieldValue);
+          preparedStatement.setInt(2, bookId);
+
           int rowsAffected = preparedStatement.executeUpdate();
           state = rowsAffected > 0;
         }
@@ -131,21 +132,21 @@ public class BookDAO implements BookDAOInterface {
     return state;
   }
 
-  public Book getBookById(int id) {
+  public Book getBookById(int bookId) {
     Book book = null;
     try {
       Connection connection = DBManager.initConnection();
       if (connection != null) {
         String selectQuery = "SELECT * FROM books WHERE id_book = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
-          preparedStatement.setInt(1, id);
+          preparedStatement.setInt(1, bookId);
           try (ResultSet resultSet = preparedStatement.executeQuery()) {
             if (resultSet.next()) {
               String title = resultSet.getString("title");
               String description = resultSet.getString("description");
               String isbnCode = resultSet.getString("isbn_code");
               book = new Book(title, description, isbnCode);
-              book.setIdBook(id);
+              book.setIdBook(bookId);
             }
           }
         }
