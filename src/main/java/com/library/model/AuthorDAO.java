@@ -14,9 +14,9 @@ public class AuthorDAO implements AuthorDAOInterface {
   private Connection connect;
   private PreparedStatement preparedStatement;
 
-  public List<Author> getAuthors(int idBook) {
+  public List<Author> getAllAuthors() {
     List<Author> authors = new ArrayList<>();
-    String query = "SELECT * FROM authors WHERE id_book = " + idBook;
+    String query = "SELECT * FROM authors";
 
     try {
       connect = DBManager.initConnection();
@@ -32,6 +32,15 @@ public class AuthorDAO implements AuthorDAOInterface {
       }
     } catch (Exception e) {
       System.out.println(e.getMessage());
+    } finally {
+      try {
+        if (preparedStatement != null)
+          preparedStatement.close();
+        if (connect != null)
+          connect.close();
+      } catch (Exception e) {
+        System.out.println(e.getMessage());
+      }
     }
 
     return authors;
@@ -120,12 +129,6 @@ public class AuthorDAO implements AuthorDAOInterface {
       }
     }
     return authorId;
-  }
-
-  @Override
-  public List<Author> getAuthors() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getAuthors'");
   }
 
 }

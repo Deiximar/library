@@ -11,7 +11,7 @@ public class BookDAO implements BookDAOInterface {
 
   public List<Book> getAllBooks() {
 
-    String query = "SELECT id_book, title FROM books";
+    String query = "SELECT * FROM books";
     List<Book> books = new ArrayList<>();
 
     try {
@@ -20,44 +20,14 @@ public class BookDAO implements BookDAOInterface {
 
       ResultSet resultSet = preparedStatement.executeQuery();
 
-      // Map<Integer, Book> bookMap = new HashMap<>();
-
       while (resultSet.next()) {
         Book book = new Book();
         book.setIdBook(resultSet.getInt("id_book"));
         book.setTitle(resultSet.getString("title"));
+        book.setDescription(resultSet.getString("description"));
+        book.setCodeISBN(resultSet.getString("isbn_code"));
         books.add(book);
       }
-
-      // while (resultSet.next()) {
-      // int bookId = resultSet.getInt("id_book");
-      // Book book = bookMap.getOrDefault(bookId, new Book());
-      // book.setIdBook(bookId);
-      // book.setTitle(resultSet.getString("title"));
-      // book.setCodeISBN(resultSet.getString("isbn_code"));
-
-      // if (!bookMap.containsKey(bookId)) {
-      // book.setAuthors(new ArrayList<>());
-      // book.setGenres(new ArrayList<>());
-      // bookMap.put(bookId, book);
-      // }
-      // int authorId = resultSet.getInt("id_author");
-      // if (authorId != 0) {
-      // Author author = new Author();
-      // author.setIdAuthor(authorId);
-      // author.setName(resultSet.getString("name"));
-      // author.setLastName(resultSet.getString("last_name"));
-      // book.getAuthors().add(author);
-      // }
-
-      // int genreId = resultSet.getInt("id_genre");
-      // if (genreId != 0) {
-      // Genre genre = new Genre();
-      // genre.setIdGenre(genreId);
-      // genre.setGenre(resultSet.getString("genre"));
-      // book.getGenres().add(genre);
-      // }
-      // }
     } catch (Exception e) {
       System.out.println(e.getMessage());
     } finally {

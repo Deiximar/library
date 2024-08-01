@@ -3,7 +3,7 @@ package com.library.model;
 import java.util.List;
 
 public interface AuthorDAOInterface {
-  List<Author> getAuthors();
+  List<Author> getAllAuthors();
 
   int addAuthor(Author author);
 
