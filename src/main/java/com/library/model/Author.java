@@ -5,12 +5,12 @@ public class Author {
   private String name;
   private String lastName;
 
-  public Author() {
-  }
-
   public Author(String name, String lastName) {
     this.name = name;
     this.lastName = lastName;
+  }
+
+  public Author() {
   }
 
   public int getIdAuthor() {
