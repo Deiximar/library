@@ -1,5 +1,7 @@
 package com.library.model;
 
+import java.util.List;
+
 public class Book {
   private int idBook;
   private String title;
@@ -7,8 +9,15 @@ public class Book {
   private String codeISBN;
   private String author;
 
-  public Book () {}
+  public Book() {
+  }
+  public Book(String title, String description, String codeISBN) {
+    this.title = title;
+    this.description = description;
+    this.codeISBN = codeISBN;
+  }
 
+  
   public Book(String title, String description, String codeISBN, String author) {
     this.title = title;
     this.description = description;

@@ -1,5 +1,8 @@
 package com.library.controller;
 
+import java.util.List;
+
+import com.library.model.Author;
 import com.library.model.AuthorBookDAOInterface;
 
 public class AuthorsBooksController {
@@ -15,7 +18,12 @@ public class AuthorsBooksController {
     return state;
   }
 
+  public List<Author> getAuthorsByBookId(int bookId) {
+    List<Author> authors = authorBookDAOInterface.getAuthorsByBookId(bookId);
+    return authors;
+  }
+
   public void deleteAuthorBookByBookId(int id) {
-    authorBookDAOInterface.deleteAuthorBookByBookId(id);  
-}
+    authorBookDAOInterface.deleteAuthorBookByBookId(id);
+  }
 }

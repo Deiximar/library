@@ -10,6 +10,9 @@ public class Author {
     this.lastName = lastName;
   }
 
+  public Author() {
+  }
+
   public int getIdAuthor() {
     return this.idAuthor;
   }
