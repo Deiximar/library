@@ -12,6 +12,11 @@ public class GenresBooksController {
     this.genreBookDAOInterface = genreBookDAOInterface;
   }
 
+  public List<Genre> getGenresByBookId(int bookId) {
+    List<Genre> genres = genreBookDAOInterface.getGenresByBookId(bookId);
+    return genres;
+  }
+
   public boolean addGenreBook(int genreId, int bookId) {
     boolean state = genreBookDAOInterface.addGenreBook(genreId, bookId);
     return state;

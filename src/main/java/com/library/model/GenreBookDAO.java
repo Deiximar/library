@@ -117,6 +117,5 @@ public class GenreBookDAO implements GenreBookDAOInterface {
       }
     }
     return genres;
-
   }
 }
