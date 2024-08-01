@@ -140,7 +140,7 @@ public class BookView {
   }
   public void searchBook(Scanner scanner) {
     while (true) {
-        System.out.println("Seleccione una opción para buscar el libro:");
+        System.out.println("\n\033[33mSeleccione una opción para buscar el libro:" + RESET);
         System.out.println("1. Buscar por título");
         System.out.println("2. Buscar por autor");
         System.out.println("3. Buscar por género");
@@ -166,11 +166,11 @@ public class BookView {
                 books = searchBookByGenre(scanner);
                 break;
             default:
-                System.out.println("Opción no válida.");
+                System.out.println("\n\033[31mOpción no válida." + RESET);
                 continue;
         }
 
-        System.out.println("Se han encontrado " + books.size() + " libro(s) con los criterios especificados.");
+        System.out.println("\n\033[32mSe han encontrado " + books.size() + " libro(s) con los criterios especificados." + RESET);
         displayBooks(books, option);
     }
 }
@@ -198,7 +198,7 @@ private List<Book> searchBookByGenre(Scanner scanner) {
 
 private void displayBooks(List<Book> books, int searchOption) {
     if (books.isEmpty()) {
-        System.out.println("No se encontraron libros con los criterios especificados.");
+        System.out.println("\n\033[31mNo se encontraron libros con los criterios especificados.");
     } else {
         if (searchOption == 3) {
             // Formato para búsqueda por género (sin descripción)

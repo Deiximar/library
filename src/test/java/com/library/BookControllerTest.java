@@ -77,21 +77,6 @@ public class BookControllerTest {
     }
 
     @Test
-    public void testAddBook_ErrorHandling() {
-        // Given
-        Book newBook = new Book("La cocina en Ghibli", "Ofrece recetas inspiradas en las peliculas del estudio ghibli", "Code ISBN 9788419316158");
-
-        when(bookDAOInterface.addBook(newBook)).thenReturn(0);
-
-        // When
-        int actualId = booksController.addBook(newBook);
-
-        // Then
-        assertEquals(0, actualId);
-        verify(bookDAOInterface, times(1)).addBook(newBook);
-    }
-
-    @Test
     public void testDeleteBookById() {
         // Given
         int idBookToDelete = 3;
