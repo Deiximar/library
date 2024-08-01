@@ -47,8 +47,7 @@ public class App {
                         bookView.deleteBook(scanner);
                         break;
                     case 5:
-                        SearchBooks searchBooks = new SearchBooks();
-                        searchBooks.searchBook();
+                        bookView.searchBook(scanner);
                         break;
                     case 6:
                         System.out.println("Saliendo...");
