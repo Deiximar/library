@@ -2,9 +2,9 @@
 
 ## Tabla de Contenidos
 - [📖 Descripción](#-descripción)
-- [🎯 Objetivos del Proyecto](#-objetivos-del-proyecto-)
+- [🎯 Objetivos del Proyecto](#-objetivos-del-proyecto)
 - [⚙️ Funcionalidades](#-funcionalidades)
-- [ Tecnologías y Herramientas](#-tecnologías-y-herramientas)
+- [💻 Tecnologías y Herramientas](#-tecnologías-y-herramientas)
 - [📹 Demo](#-demo)
 - [✅ Testing](#-testing)
 - [🤝 Contribuyentes](#-contribuyentes)
