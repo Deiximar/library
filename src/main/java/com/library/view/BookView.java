@@ -46,7 +46,11 @@ public class BookView {
 
   public void showAllBooks() {
     List<Book> books = booksController.getAllBooks();
-    String tableFormat = "| %-5s | %-20s | %-35s | %-25s | %-15s |%n";
+    String tableFormat = "| %-3s | %-40s | %-40s| %-40s | %15sn | %n";
+    String line = "+-----+------------------------------------------+-----------------------------------------+------------------------------------------+------------------+";
+    System.out.println(line);
+    System.out.printf(tableFormat, "ID", "Título", "Autores", "Géneros", "código ISBN");
+
     for (Book book : books) {
 
       List<Author> authors = authorsBookController.getAuthorsByBookId(book.getIdBook());
@@ -61,15 +65,10 @@ public class BookView {
       }
       String authorNames = authorNamesJoiner.toString();
       String genreNames = genreNamesJoiner.toString();
-
-      String line = "+-------+----------------------+-------------------------------------+---------------------------+-----------------+";
-      System.out.println(line);
-      System.out.printf(tableFormat, "ID", "Título", "Autores", "Géneros", "código ISBN");
       System.out.println(line);
       System.out.printf(tableFormat, book.getIdBook(), book.getTitle(), authorNames, genreNames, book.getCodeISBN());
-      System.out.println(line);
     }
-
+    System.out.println(line);
   }
 
   public void addBook(Scanner scanner) {

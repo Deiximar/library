@@ -116,11 +116,4 @@ public class GenreDAO implements GenreDAOInterface {
     }
     return genreId;
   }
-
-  @Override
-  public List<Genre> getGenres() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getGenres'");
-  }
-
 }
