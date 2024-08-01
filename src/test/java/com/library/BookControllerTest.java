@@ -3,6 +3,7 @@ package com.library;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,6 +47,20 @@ public class BookControllerTest {
     }
 
     @Test
+    public void testGetAllBooks_EmptyResult() {
+        // Given
+        when(bookDAOInterface.getAllBooks()).thenReturn(Collections.emptyList());
+
+        // When
+        List<Book> books = booksController.getAllBooks();
+
+        // Then
+        assertTrue(books.isEmpty());
+        verify(bookDAOInterface, times(1)).getAllBooks();
+    }
+
+   
+    @Test
     public void testAddBook() {
         // Given
         Book newBook = new Book("Harry potter y el prisionero de Azkaban", "Narra la historia de un mago de 13 años", "Code ISBN 9788419275820");
@@ -72,4 +87,5 @@ public class BookControllerTest {
         // Then
         verify(bookDAOInterface, times(1)).deleteBookById(idBookToDelete);
     }
+
 }
