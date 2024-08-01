@@ -5,13 +5,15 @@ public class Book {
   private String title;
   private String description;
   private String codeISBN;
+  private String author;
 
   public Book () {}
 
-  public Book(String title, String description, String codeISBN) {
+  public Book(String title, String description, String codeISBN, String author) {
     this.title = title;
     this.description = description;
     this.codeISBN = codeISBN;
+    this.author = author;
   }
 
   public int getIdBook() {
@@ -46,4 +48,11 @@ public class Book {
     this.codeISBN = codeISBN;
   }
 
+public String getAuthor() {
+  return this.author;
+}
+
+public void setAuthor(String author) {
+  this.author = author;
+}
 }
