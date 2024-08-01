@@ -14,8 +14,8 @@ public class AuthorsController {
   }
 
   public List<Author> getAllAuthors() {
-    List<Author> idAuthor = authorDAOInterface.getAllAuthors();
-    return idAuthor;
+    List<Author> authors = authorDAOInterface.getAllAuthors();
+    return authors;
   }
 
   public int addAuthor(Author author) {
