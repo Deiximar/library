@@ -11,7 +11,7 @@ public class BooksController {
     this.bookDAOInterface = bookDAOInterface;
   }
 
-  public List<Book> getAllBooks(){
+  public List<Book> getAllBooks() {
     List<Book> books = bookDAOInterface.getAllBooks();
     return books;
   }
@@ -23,5 +23,14 @@ public class BooksController {
 
   public void deleteBookById(int idBook) {
     bookDAOInterface.deleteBookById(idBook);
+  }
+
+  public void updateBookField(String field, String fieldValue, int bookId) {
+    bookDAOInterface.updateBookByField(field, fieldValue, bookId);
+  }
+
+  public Book getBookById(int bookId) {
+    Book book = bookDAOInterface.getBookById(bookId);
+    return book;
   }
 }

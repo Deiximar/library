@@ -1,5 +1,8 @@
 package com.library.controller;
 
+import java.util.List;
+
+import com.library.model.Genre;
 import com.library.model.GenreBookDAOInterface;
 
 public class GenresBooksController {
@@ -16,5 +19,14 @@ public class GenresBooksController {
 
   public void deleteGenresBookByBookId(int id) {
     genreBookDAOInterface.deleteGenresBookByBookId(id);
+  }
+
+  public void deleteGenresBookByBookId(int bookId, int genreId) {
+    genreBookDAOInterface.deleteGenresBookByBookId(bookId, genreId);
+  }
+
+  public List<Genre> getGenresByBookId(int bookId) {
+    List<Genre> genres = genreBookDAOInterface.getGenresByBookId(bookId);
+    return genres;
   }
 }
