@@ -56,7 +56,7 @@ public class SearchBooks {
         }
     }
 
-    private int searchBookByTitle(Scanner scanner) {
+    int searchBookByTitle(Scanner scanner) {
         System.out.println("¿Cuál es el título del libro que quiere buscar?:");
         String bookTitle = scanner.nextLine();
         return search("SELECT b.id_book, b.title, b.description, b.isbn_code, a.name || ' ' || a.last_name AS author " +
@@ -66,7 +66,7 @@ public class SearchBooks {
                 "WHERE b.title = ?", bookTitle, true);
     }
 
-    private int searchBookByAuthor(Scanner scanner) {
+    int searchBookByAuthor(Scanner scanner) {
         System.out.println("¿Quién es el autor del libro que quiere buscar?:");
         String authorFullName = scanner.nextLine();
         String[] nameParts = authorFullName.split(" ");
@@ -80,7 +80,7 @@ public class SearchBooks {
                 "WHERE a.name = ? OR a.last_name = ?", authorName, authorLastName, true);
     }
 
-    private int searchBookByGenre(Scanner scanner) {
+    int searchBookByGenre(Scanner scanner) {
         System.out.println("¿Cuál es el género del libro que quiere buscar?:");
         String bookGenre = scanner.nextLine();
         return search("SELECT b.id_book, b.title, b.isbn_code, a.name || ' ' || a.last_name AS author " +
@@ -129,7 +129,6 @@ public class SearchBooks {
                 String author = resultSet.getString("author");
                 String isbn = resultSet.getString("isbn_code");
 
-                // Obtener la descripción solo si está incluida en la consulta
                 String description = includeDescription ? resultSet.getString("description") : "";
 
                 if (includeDescription) {
