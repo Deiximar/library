@@ -1,32 +1,27 @@
 package com.library.model;
 
-
- import java.util.ArrayList;
- import java.util.List;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.library.config.DBManager;
 
- import java.sql.Connection;
- import java.sql.PreparedStatement;
- import java.sql.ResultSet;
- import java.sql.Statement;
-
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class BookDAO implements BookDAOInterface {
   private Connection connect;
   private PreparedStatement preparedStatement;
 
   public List<Book> getAllBooks() {
-
     String query = "SELECT * FROM books";
     List<Book> books = new ArrayList<>();
 
     try {
       connect = DBManager.initConnection();
       preparedStatement = connect.prepareStatement(query);
-
       ResultSet resultSet = preparedStatement.executeQuery();
-
       while (resultSet.next()) {
         Book book = new Book();
         book.setIdBook(resultSet.getInt("id_book"));
@@ -119,7 +114,6 @@ public class BookDAO implements BookDAOInterface {
     try {
       connect = DBManager.initConnection();
       preparedStatement = connect.prepareStatement(query);
-
       preparedStatement.setInt(1, id);
       resultRowsDeleted = preparedStatement.executeUpdate();
       if (resultRowsDeleted > 0) {
@@ -136,86 +130,133 @@ public class BookDAO implements BookDAOInterface {
   public List<Book> searchBooksByTitle(String title) {
     List<Book> books = new ArrayList<>();
     String query = "SELECT b.id_book, b.title, b.description, b.isbn_code, a.name || ' ' || a.last_name AS author " +
-                   "FROM books b " +
-                   "LEFT JOIN authors_books ab ON b.id_book = ab.id_book " +
-                   "LEFT JOIN authors a ON ab.id_author = a.id_author " +
-                   "WHERE b.title = ?";
+        "FROM books b " +
+        "LEFT JOIN authors_books ab ON b.id_book = ab.id_book " +
+        "LEFT JOIN authors a ON ab.id_author = a.id_author " +
+        "WHERE b.title = ?";
     try {
-        connect = DBManager.initConnection();
-        preparedStatement = connect.prepareStatement(query);
-        preparedStatement.setString(1, title);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        while (resultSet.next()) {
-            Book book = new Book();
-            book.setIdBook(resultSet.getInt("id_book"));
-            book.setTitle(resultSet.getString("title"));
-            book.setDescription(resultSet.getString("description"));
-            book.setCodeISBN(resultSet.getString("isbn_code"));
-            book.setAuthor(resultSet.getString("author"));
-            books.add(book);
-        }
+      connect = DBManager.initConnection();
+      preparedStatement = connect.prepareStatement(query);
+      preparedStatement.setString(1, title);
+      ResultSet resultSet = preparedStatement.executeQuery();
+      while (resultSet.next()) {
+        Book book = new Book();
+        book.setIdBook(resultSet.getInt("id_book"));
+        book.setTitle(resultSet.getString("title"));
+        book.setDescription(resultSet.getString("description"));
+        book.setCodeISBN(resultSet.getString("isbn_code"));
+        book.setAuthor(resultSet.getString("author"));
+        books.add(book);
+      }
     } catch (Exception e) {
-        System.out.println(e.getMessage());
+      System.out.println(e.getMessage());
     }
     return books;
-}
+  }
 
-
-public List<Book> searchBooksByAuthor(String authorName, String authorLastName) {
+  public List<Book> searchBooksByAuthor(String authorName, String authorLastName) {
     List<Book> books = new ArrayList<>();
     String query = "SELECT b.id_book, b.title, b.description, b.isbn_code, a.name || ' ' || a.last_name AS author " +
-                   "FROM books b " +
-                   "INNER JOIN authors_books ab ON b.id_book = ab.id_book " +
-                   "INNER JOIN authors a ON ab.id_author = a.id_author " +
-                   "WHERE a.name = ? OR a.last_name = ?";
+        "FROM books b " +
+        "INNER JOIN authors_books ab ON b.id_book = ab.id_book " +
+        "INNER JOIN authors a ON ab.id_author = a.id_author " +
+        "WHERE a.name = ? OR a.last_name = ?";
     try {
-        connect = DBManager.initConnection();
-        preparedStatement = connect.prepareStatement(query);
-        preparedStatement.setString(1, authorName);
-        preparedStatement.setString(2, authorLastName);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        while (resultSet.next()) {
-            Book book = new Book();
-            book.setIdBook(resultSet.getInt("id_book"));
-            book.setTitle(resultSet.getString("title"));
-            book.setDescription(resultSet.getString("description"));
-            book.setCodeISBN(resultSet.getString("isbn_code"));
-            book.setAuthor(resultSet.getString("author"));
-            books.add(book);
-        }
+      connect = DBManager.initConnection();
+      preparedStatement = connect.prepareStatement(query);
+      preparedStatement.setString(1, authorName);
+      preparedStatement.setString(2, authorLastName);
+      ResultSet resultSet = preparedStatement.executeQuery();
+      while (resultSet.next()) {
+        Book book = new Book();
+        book.setIdBook(resultSet.getInt("id_book"));
+        book.setTitle(resultSet.getString("title"));
+        book.setDescription(resultSet.getString("description"));
+        book.setCodeISBN(resultSet.getString("isbn_code"));
+        book.setAuthor(resultSet.getString("author"));
+        books.add(book);
+      }
     } catch (Exception e) {
-        System.out.println(e.getMessage());
+      System.out.println(e.getMessage());
     }
     return books;
-}
+  }
 
-
-public List<Book> searchBooksByGenre(String genre) {
+  public List<Book> searchBooksByGenre(String genre) {
     List<Book> books = new ArrayList<>();
     String query = "SELECT b.id_book, b.title, b.isbn_code, a.name || ' ' || a.last_name AS author " +
-                   "FROM books b " +
-                   "INNER JOIN genres_books gb ON b.id_book = gb.id_book " +
-                   "INNER JOIN genres g ON gb.id_genre = g.id_genre " +
-                   "LEFT JOIN authors_books ab ON b.id_book = ab.id_book " +
-                   "LEFT JOIN authors a ON ab.id_author = a.id_author " +
-                   "WHERE g.genre = ?";
+        "FROM books b " +
+        "INNER JOIN genres_books gb ON b.id_book = gb.id_book " +
+        "INNER JOIN genres g ON gb.id_genre = g.id_genre " +
+        "LEFT JOIN authors_books ab ON b.id_book = ab.id_book " +
+        "LEFT JOIN authors a ON ab.id_author = a.id_author " +
+        "WHERE g.genre = ?";
     try {
-        connect = DBManager.initConnection();
-        preparedStatement = connect.prepareStatement(query);
-        preparedStatement.setString(1, genre);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        while (resultSet.next()) {
-            Book book = new Book();
-            book.setIdBook(resultSet.getInt("id_book"));
-            book.setTitle(resultSet.getString("title"));
-            book.setCodeISBN(resultSet.getString("isbn_code"));
-            book.setAuthor(resultSet.getString("author"));
-            books.add(book);
-        }
+      connect = DBManager.initConnection();
+      preparedStatement = connect.prepareStatement(query);
+      preparedStatement.setString(1, genre);
+      ResultSet resultSet = preparedStatement.executeQuery();
+      while (resultSet.next()) {
+        Book book = new Book();
+        book.setIdBook(resultSet.getInt("id_book"));
+        book.setTitle(resultSet.getString("title"));
+        book.setCodeISBN(resultSet.getString("isbn_code"));
+        book.setAuthor(resultSet.getString("author"));
+        books.add(book);
+      }
     } catch (Exception e) {
-        System.out.println(e.getMessage());
+      System.out.println(e.getMessage());
     }
     return books;
-}
+  }
 
+  public boolean updateBookByField(String field, String fieldValue, int bookId) {
+    boolean state = false;
+    try {
+      Connection connection = DBManager.initConnection();
+
+      if (connection != null) {
+        String updateQuery = "UPDATE books SET " + field + " = ? WHERE id_book = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
+          preparedStatement.setString(1, fieldValue);
+          preparedStatement.setInt(2, bookId);
+
+          int rowsAffected = preparedStatement.executeUpdate();
+          state = rowsAffected > 0;
+        }
+      } else {
+        System.out.println("Conexión a la base de datos fallida");
+      }
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
+    return state;
+  }
+
+  public Book getBookById(int bookId) {
+    Book book = null;
+    try {
+      Connection connection = DBManager.initConnection();
+      if (connection != null) {
+        String selectQuery = "SELECT * FROM books WHERE id_book = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
+          preparedStatement.setInt(1, bookId);
+          try (ResultSet resultSet = preparedStatement.executeQuery()) {
+            if (resultSet.next()) {
+              String title = resultSet.getString("title");
+              String description = resultSet.getString("description");
+              String isbnCode = resultSet.getString("isbn_code");
+              book = new Book(title, description, isbnCode);
+              book.setIdBook(bookId);
+            }
+          }
+        }
+      } else {
+        System.out.println("Conexión a la base de datos fallida");
+      }
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
+    return book;
+  }
 }

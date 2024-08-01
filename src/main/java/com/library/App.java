@@ -41,7 +41,7 @@ public class App {
                         bookView.addBook(scanner);
                         break;
                     case 3:
-                        // editBook();
+                        bookView.editBook(scanner);
                         break;
                     case 4:
                         bookView.deleteBook(scanner);
