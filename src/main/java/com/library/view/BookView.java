@@ -1,8 +1,8 @@
 package com.library.view;
 
-//import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.StringJoiner;
 
 import com.library.controller.AuthorsBooksController;
 import com.library.controller.AuthorsController;
@@ -44,6 +44,34 @@ public class BookView {
     this.booksController = booksController;
   }
 
+  public void showAllBooks() {
+    List<Book> books = booksController.getAllBooks();
+    String tableFormat = "| %-5s | %-20s | %-35s | %-25s | %-15s |%n";
+    for (Book book : books) {
+
+      List<Author> authors = authorsBookController.getAuthorsByBookId(book.getIdBook());
+      List<Genre> genres = genresBooksController.getGenresByBookId(book.getIdBook());
+      StringJoiner authorNamesJoiner = new StringJoiner(", ");
+      StringJoiner genreNamesJoiner = new StringJoiner(", ");
+      for (Author author : authors) {
+        authorNamesJoiner.add(author.getName().trim() + " " + author.getLastName().trim());
+      }
+      for (Genre genre : genres) {
+        genreNamesJoiner.add(genre.getGenre());
+      }
+      String authorNames = authorNamesJoiner.toString();
+      String genreNames = genreNamesJoiner.toString();
+
+      String line = "+-------+----------------------+-------------------------------------+---------------------------+-----------------+";
+      System.out.println(line);
+      System.out.printf(tableFormat, "ID", "Título", "Autores", "Géneros", "código ISBN");
+      System.out.println(line);
+      System.out.printf(tableFormat, book.getIdBook(), book.getTitle(), authorNames, genreNames, book.getCodeISBN());
+      System.out.println(line);
+    }
+
+  }
+
   public void addBook(Scanner scanner) {
     scanner.nextLine();
 
@@ -56,6 +84,7 @@ public class BookView {
     String codeISBN = scanner.nextLine();
 
     Book book = new Book(title, description, codeISBN);
+
     int bookId = booksController.addBook(book);
 
     if (bookId > 0) {
@@ -76,36 +105,36 @@ public class BookView {
   };
 
   public void deleteBook(Scanner scanner) {
-        List<Book> books = booksController.getAllBooks();
-        Boolean shouldAskId = true;
-        String RESET = "\033[0m";
-        int idBook;
-        boolean found = false;
+    List<Book> books = booksController.getAllBooks();
+    Boolean shouldAskId = true;
+    String RESET = "\033[0m";
+    int idBook;
+    boolean found = false;
 
-        for (Book book : books) {
-          System.out.println("ID: " + book.getIdBook() + ", Título: " + book.getTitle());
-        }
+    for (Book book : books) {
+      System.out.println("ID: " + book.getIdBook() + ", Título: " + book.getTitle());
+    }
 
-        while (shouldAskId) {
-            if (books.isEmpty()) {
-                System.out.println("\n\033[31mNo existen libros para eliminar" + RESET);
-                break;
-            }
-            System.out.println("\n\033[33mEscribe el ID del libro que deseas eliminar o escribe 0 para cancelar\n");
-            idBook = scanner.nextInt();
-            scanner.nextLine();
-            final int finalIdBook = idBook;
-            found = books.stream().anyMatch(book -> book.getIdBook() == finalIdBook);
-            if (idBook > 0 && found) {
-                shouldAskId = false;
-                System.out.println("\033[32mEl ID es válido\n"+ RESET);
-                genreBookView.deleteGenresBookByBookId(idBook);
-                authorBookView.deleteAuthorBookByBookId(idBook);
-                booksController.deleteBookById(idBook);
-            } else {
-                System.out.println("\n\033[31mEl ID introducido no es válido" + RESET);
-                shouldAskId = false;
-            }
-        }
+    while (shouldAskId) {
+      if (books.isEmpty()) {
+        System.out.println("\n\033[31mNo existen libros para eliminar" + RESET);
+        break;
+      }
+      System.out.println("\n\033[33mEscribe el ID del libro que deseas eliminar o escribe 0 para cancelar\n");
+      idBook = scanner.nextInt();
+      scanner.nextLine();
+      final int finalIdBook = idBook;
+      found = books.stream().anyMatch(book -> book.getIdBook() == finalIdBook);
+      if (idBook > 0 && found) {
+        shouldAskId = false;
+        System.out.println("\033[32mEl ID es válido\n" + RESET);
+        genreBookView.deleteGenresBookByBookId(idBook);
+        authorBookView.deleteAuthorBookByBookId(idBook);
+        booksController.deleteBookById(idBook);
+      } else {
+        System.out.println("\n\033[31mEl ID introducido no es válido" + RESET);
+        shouldAskId = false;
+      }
+    }
   }
 }

@@ -1,25 +1,19 @@
 package com.library.model;
 
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.library.config.DBManager;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-//import java.sql.ResultSet;
-//import java.sql.Statement;
-import java.sql.ResultSet;
 
 public class BookDAO implements BookDAOInterface {
   private Connection connect;
   private PreparedStatement preparedStatement;
 
   public List<Book> getAllBooks() {
-    List<Book> books = new ArrayList<>();
 
     String query = "SELECT * FROM books";
+    List<Book> books = new ArrayList<>();
+
     try {
       connect = DBManager.initConnection();
       preparedStatement = connect.prepareStatement(query);
@@ -30,10 +24,21 @@ public class BookDAO implements BookDAOInterface {
         Book book = new Book();
         book.setIdBook(resultSet.getInt("id_book"));
         book.setTitle(resultSet.getString("title"));
+        book.setDescription(resultSet.getString("description"));
+        book.setCodeISBN(resultSet.getString("isbn_code"));
         books.add(book);
       }
     } catch (Exception e) {
       System.out.println(e.getMessage());
+    } finally {
+      try {
+        if (preparedStatement != null)
+          preparedStatement.close();
+        if (connect != null)
+          connect.close();
+      } catch (Exception e) {
+        System.out.println(e.getMessage());
+      }
     }
     return books;
   }
