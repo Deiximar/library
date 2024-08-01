@@ -15,6 +15,7 @@ import com.library.model.AuthorDAO;
 import com.library.model.AuthorDAOInterface;
 import com.library.model.Book;
 import com.library.model.BookDAO;
+import com.library.model.BookDAOInterface;
 import com.library.model.Genre;
 import com.library.model.GenreBookDAO;
 import com.library.model.GenreBookDAOInterface;
@@ -39,6 +40,11 @@ public class BookView {
   private GenresBooksController genresBooksController = new GenresBooksController(genreBookDAO);
   private GenreBookView genreBookView = new GenreBookView(genresBooksController);
 
+  // private BookDAOInterface bookDAO = new BookDAO();
+  // private BooksController booksController = new BooksController(bookDAO);
+  // private BookView Bookview = new BookView(booksController);
+  // view.showAllBooks();
+
   private BooksController booksController;
 
   public BookView(BooksController booksController) {
@@ -47,7 +53,9 @@ public class BookView {
 
   public void showAllBooks() {
     List<Book> books = booksController.getAllBooks();
-    List<Author> authors = new ArrayList<>();
+    // List<Author> authors = new ArrayList<>();
+
+    displayBooks(books);
 
     // for (Author author : book.getAuthors()) {
     // Author newAuthor;
@@ -56,7 +64,8 @@ public class BookView {
     // newAuthor.setLastName(author.getLastName());
     // }
 
-    System.out.printf("%-10s %-20s %-20s %-20s %-15s %-15s\n", "ID", "Título", "Autor", "Apellido", "ISBN", "Género");
+    // System.out.printf("%-10s %-20s %-20s %-20s %-15s %-15s\n", "ID", "Título",
+    // "Autor", "Apellido", "ISBN", "Género");
     // for (Book book : books) {
     // System.out.printf("%-10d %-20s %-20s %-20s %-15s %-15s\n",
     // book.getIdBook(),
@@ -68,6 +77,20 @@ public class BookView {
     // book.getGenres().getGenres());
     // }
 
+  }
+
+  public void displayBooks(List<Book> books) {
+    System.out.println("+---------+----------------------+");
+    System.out.println("| ID      | Title                |");
+    System.out.println("+---------+----------------------+");
+
+    for (Book book : books) {
+      System.out.format("| %-7d | %-20s |\n",
+          book.getIdBook(),
+          book.getTitle());
+    }
+
+    System.out.println("+---------+----------------------+");
   }
 
   public void addBook(Scanner scanner) {

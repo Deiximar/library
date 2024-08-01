@@ -2,10 +2,7 @@ package com.library.model;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import com.library.config.DBManager;
 
 public class BookDAO implements BookDAOInterface {
@@ -14,7 +11,7 @@ public class BookDAO implements BookDAOInterface {
 
   public List<Book> getAllBooks() {
 
-    String query = "SELECT * FROM books";
+    String query = "SELECT id_book, title FROM books";
     List<Book> books = new ArrayList<>();
 
     try {
@@ -29,7 +26,6 @@ public class BookDAO implements BookDAOInterface {
         Book book = new Book();
         book.setIdBook(resultSet.getInt("id_book"));
         book.setTitle(resultSet.getString("title"));
-        book.setDescription(resultSet.getString("description"));
         books.add(book);
       }
 
@@ -64,6 +60,15 @@ public class BookDAO implements BookDAOInterface {
       // }
     } catch (Exception e) {
       System.out.println(e.getMessage());
+    } finally {
+      try {
+        if (preparedStatement != null)
+          preparedStatement.close();
+        if (connect != null)
+          connect.close();
+      } catch (Exception e) {
+        System.out.println(e.getMessage());
+      }
     }
     return books;
   }

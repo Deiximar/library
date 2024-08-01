@@ -122,4 +122,10 @@ public class AuthorDAO implements AuthorDAOInterface {
     return authorId;
   }
 
+  @Override
+  public List<Author> getAuthors() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'getAuthors'");
+  }
+
 }
