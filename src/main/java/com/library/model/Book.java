@@ -1,7 +1,5 @@
 package com.library.model;
 
-import java.util.List;
-
 public class Book {
   private int idBook;
   private String title;
@@ -11,13 +9,13 @@ public class Book {
 
   public Book() {
   }
+
   public Book(String title, String description, String codeISBN) {
     this.title = title;
     this.description = description;
     this.codeISBN = codeISBN;
   }
 
-  
   public Book(String title, String description, String codeISBN, String author) {
     this.title = title;
     this.description = description;
@@ -57,11 +55,11 @@ public class Book {
     this.codeISBN = codeISBN;
   }
 
-public String getAuthor() {
-  return this.author;
-}
+  public String getAuthor() {
+    return this.author;
+  }
 
-public void setAuthor(String author) {
-  this.author = author;
-}
+  public void setAuthor(String author) {
+    this.author = author;
+  }
 }
