@@ -1,9 +1,6 @@
 package com.library.view;
 
-import java.util.List;
-
 import com.library.controller.GenresBooksController;
-import com.library.model.Genre;
 
 public class GenreBookView {
   private GenresBooksController genresBooksController;
@@ -22,16 +19,5 @@ public class GenreBookView {
 
   public void deleteGenresBookByBookId(int id) {
     genresBooksController.deleteGenresBookByBookId(id);
-  }
-
-  public void showGenresByBookId(List<Genre> genres) {
-    if (genres.isEmpty()) {
-      System.out.println("No existe autores para este libro.\n");
-      return;
-    } else {
-      for (Genre genre : genres) {
-        System.out.println("ID: " + genre.getIdGenre() + ", Género: " + genre.getGenre());
-      }
-    }
   }
 }
