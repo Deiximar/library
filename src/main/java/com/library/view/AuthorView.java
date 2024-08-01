@@ -49,4 +49,51 @@ public class AuthorView {
     }
     return success;
   }
+
+  public List<Author> updateAuthorsByBook(Scanner scanner, int bookId) {
+    boolean ask = true;
+    List<Author> authors = new ArrayList<>();
+    System.out.println(
+        "\nEstos son los autores vinculados a este libro.");
+    while (ask) {
+      authors = authorsBooksController.getAuthorsByBookId(bookId);
+      authorBookView.showAuthorsByBookId(authors);
+      System.out.println("\nElija la opción que quiera realizar para el o los autores de este libro");
+      System.out.println(" 1. Agregar nuevo autor\n 2. Desvincular autor\n 3. Salir");
+
+      int authorOption = scanner.nextInt();
+      scanner.nextLine();
+
+      switch (authorOption) {
+        case 1:
+          List<Author> newAuthors = getAuthors(scanner);
+          addAuthors(newAuthors, bookId);
+          System.out.println(
+              "\nEstos son los autores vinculados a este libro actualizados.");
+          break;
+        case 2:
+          boolean foundAuthor = false;
+          while (!foundAuthor) {
+            System.out.println("Introduzca el id del autor a desvincular");
+            int idAuthor = scanner.nextInt();
+            foundAuthor = authors.stream().anyMatch(author -> author.getIdAuthor() == idAuthor);
+            if (foundAuthor) {
+              System.out.println("Desvinculando author...");
+              authorsBooksController.deleteAuthorBookByBookId(bookId, idAuthor);
+              System.out.println(
+                  "\nEstos son los autores vinculados a este libro actualizados.");
+            } else {
+              System.out.println("Número de id incorrecto");
+            }
+          }
+          break;
+        case 3:
+          ask = false;
+          return authors;
+        default:
+          System.out.println("Input incorrecto. Intente de nuevo");
+      }
+    }
+    return authors;
+  }
 }
