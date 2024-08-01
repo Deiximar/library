@@ -137,4 +137,116 @@ public class BookView {
       }
     }
   }
+  public void searchBook(Scanner scanner) {
+    while (true) {
+        System.out.println("Seleccione una opción para buscar el libro:");
+        System.out.println("1. Buscar por título");
+        System.out.println("2. Buscar por autor");
+        System.out.println("3. Buscar por género");
+        System.out.println("4. Salir");
+
+        int option = scanner.nextInt();
+        scanner.nextLine();
+
+        if (option == 4) {
+            System.out.println("Saliendo de la búsqueda...");
+            break;
+        }
+
+        List<Book> books;
+        switch (option) {
+            case 1:
+                books = searchBookByTitle(scanner);
+                break;
+            case 2:
+                books = searchBookByAuthor(scanner);
+                break;
+            case 3:
+                books = searchBookByGenre(scanner);
+                break;
+            default:
+                System.out.println("Opción no válida.");
+                continue;
+        }
+
+        System.out.println("Se han encontrado " + books.size() + " libro(s) con los criterios especificados.");
+        displayBooks(books, option);
+    }
+}
+
+private List<Book> searchBookByTitle(Scanner scanner) {
+    System.out.println("¿Cuál es el título del libro que quiere buscar?:");
+    String bookTitle = scanner.nextLine();
+    return booksController.searchBooksByTitle(bookTitle);
+}
+
+private List<Book> searchBookByAuthor(Scanner scanner) {
+    System.out.println("¿Quién es el autor del libro que quiere buscar?:");
+    String authorFullName = scanner.nextLine();
+    String[] nameParts = authorFullName.split(" ");
+    String authorName = nameParts[0];
+    String authorLastName = nameParts.length > 1 ? nameParts[1] : "";
+    return booksController.searchBooksByAuthor(authorName, authorLastName);
+}
+
+private List<Book> searchBookByGenre(Scanner scanner) {
+    System.out.println("¿Cuál es el género del libro que quiere buscar?:");
+    String bookGenre = scanner.nextLine();
+    return booksController.searchBooksByGenre(bookGenre);
+}
+
+private void displayBooks(List<Book> books, int searchOption) {
+    if (books.isEmpty()) {
+        System.out.println("No se encontraron libros con los criterios especificados.");
+    } else {
+        if (searchOption == 3) {
+            // Formato para búsqueda por género (sin descripción)
+            String format = "| %-10d | %-30s | %-30s | %-15s |%n";
+            System.out.format(
+                "+------------+--------------------------------+--------------------------------+-----------------+%n");
+            System.out.format(
+                "| ID         | Título                         | Autor                          | ISBN            |%n");
+            System.out.format(
+                "+------------+--------------------------------+--------------------------------+-----------------+%n");
+            
+            for (Book book : books) {
+                System.out.format(format,
+                    book.getIdBook(),
+                    book.getTitle(),
+                    book.getAuthor(),
+                    book.getCodeISBN());
+            }
+            System.out.format(
+                "+------------+--------------------------------+--------------------------------+-----------------+%n");
+        } else {
+            // Formato para otras búsquedas (con descripción)
+            String format = "| %-10d | %-30s | %-30s | %-40s | %-15s |%n";
+            System.out.format(
+                "+------------+--------------------------------+--------------------------------+------------------------------------------+-----------------+%n");
+            System.out.format(
+                "| ID         | Título                         | Autor                          | Descripción                              | ISBN            |%n");
+            System.out.format(
+                "+------------+--------------------------------+--------------------------------+------------------------------------------+-----------------+%n");
+            
+            for (Book book : books) {
+                System.out.format(format,
+                    book.getIdBook(),
+                    book.getTitle(),
+                    book.getAuthor(),
+                    truncate(book.getDescription(), 40),
+                    book.getCodeISBN());
+            }
+            System.out.format(
+                "+------------+--------------------------------+--------------------------------+------------------------------------------+-----------------+%n");
+        }
+    }
+}
+
+private String truncate(String value, int length) {
+    if (value.length() <= length) {
+        return value;
+    } else {
+        return value.substring(0, length - 3) + "...";
+    }
+}
 }

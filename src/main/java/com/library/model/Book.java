@@ -7,16 +7,22 @@ public class Book {
   private String title;
   private String description;
   private String codeISBN;
-  private List<Author> authors;
-  private List<Genre> genres;
+  private String author;
 
   public Book() {
   }
-
   public Book(String title, String description, String codeISBN) {
     this.title = title;
     this.description = description;
     this.codeISBN = codeISBN;
+  }
+
+  
+  public Book(String title, String description, String codeISBN, String author) {
+    this.title = title;
+    this.description = description;
+    this.codeISBN = codeISBN;
+    this.author = author;
   }
 
   public int getIdBook() {
@@ -51,20 +57,11 @@ public class Book {
     this.codeISBN = codeISBN;
   }
 
-  public List<Author> getAuthors() {
-    return authors;
-  }
+public String getAuthor() {
+  return this.author;
+}
 
-  public void setAuthors(List<Author> authors) {
-    this.authors = authors;
-  }
-
-  public List<Genre> getGenres() {
-    return genres;
-  }
-
-  public void setGenres(List<Genre> genres) {
-    this.genres = genres;
-  }
-
+public void setAuthor(String author) {
+  this.author = author;
+}
 }

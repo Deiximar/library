@@ -24,4 +24,17 @@ public class BooksController {
   public void deleteBookById(int idBook) {
     bookDAOInterface.deleteBookById(idBook);
   }
+
+  public List<Book> searchBooksByTitle(String title) {
+    return bookDAOInterface.searchBooksByTitle(title);
+}
+
+public List<Book> searchBooksByAuthor(String authorName, String authorLastName) {
+    return bookDAOInterface.searchBooksByAuthor(authorName, authorLastName);
+}
+
+public List<Book> searchBooksByGenre(String genre) {
+    return bookDAOInterface.searchBooksByGenre(genre);
+}
+
 }
