@@ -121,7 +121,7 @@ public class BookView {
         System.out.println("\n\033[31mNo existen libros para eliminar" + RESET);
         break;
       }
-      System.out.println("\n\033[33mEscribe el ID del libro que deseas eliminar o escribe 0 para cancelar\n");
+      System.out.println("\n\033[33mEscribe el ID del libro que deseas eliminar o escribe 0 para cancelar\n" + RESET);
       idBook = scanner.nextInt();
       scanner.nextLine();
       final int finalIdBook = idBook;
