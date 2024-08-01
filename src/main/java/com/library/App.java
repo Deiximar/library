@@ -37,7 +37,7 @@ public class App {
                         bookView.addBook(scanner);
                         break;
                     case 3:
-                        // editBook();
+                        bookView.editBook(scanner);
                         break;
                     case 4:
                         bookView.deleteBook(scanner);
@@ -56,35 +56,3 @@ public class App {
         scanner.close();
     }
 }
-/*
- * Implementación de editBook usando bookDAO
- * private static void editBook() {
- * BookDAO bookModel = new BookDAO();
- * 
- * // Solicitar al usuario el ID del libro a editar
- * System.out.println("Ingrese el ID del libro a editar:");
- * int id = scanner.nextInt();
- * scanner.nextLine(); // Consumir el salto de línea restante
- * 
- * // Solicitar nuevos datos del libro
- * System.out.println("Ingrese el nuevo título del libro:");
- * String newTitle = scanner.nextLine();
- * System.out.println("Ingrese la nueva descripción del libro:");
- * String newDescription = scanner.nextLine();
- * System.out.println("Ingrese el nuevo código ISBN del libro:");
- * String newIsbnCode = scanner.nextLine();
- * 
- * // Crear un objeto Book con los nuevos datos
- * Book bookToUpdate = new Book(newTitle, newDescription, newIsbnCode);
- * bookToUpdate.setIdBook(id);
- * 
- * // Usar bookDAO para actualizar el libro en la base de datos
- * boolean updated = bookModel.updateBook(bookToUpdate);
- * 
- * // Informar al usuario si la actualización fue exitosa o no
- * if (updated) {
- * System.out.println("Libro actualizado exitosamente.");
- * } else {
- * System.out.println("No se pudo actualizar el libro.");
- * }
- */
