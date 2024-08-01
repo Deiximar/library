@@ -29,9 +29,4 @@ public class GenresBooksController {
   public void deleteGenresBookByBookId(int bookId, int genreId) {
     genreBookDAOInterface.deleteGenresBookByBookId(bookId, genreId);
   }
-
-  public List<Genre> getGenresByBookId(int bookId) {
-    List<Genre> genres = genreBookDAOInterface.getGenresByBookId(bookId);
-    return genres;
-  }
 }

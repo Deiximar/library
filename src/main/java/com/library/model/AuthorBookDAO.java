@@ -5,9 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.library.config.DBManager;
 
