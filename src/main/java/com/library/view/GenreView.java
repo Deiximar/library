@@ -47,4 +47,52 @@ public class GenreView {
     }
     return success;
   }
+
+  public List<Genre> updateGenresByBook(Scanner scanner, int bookId) {
+    boolean ask = true;
+    List<Genre> genres = new ArrayList<>();
+    System.out.println(
+        "\nEstos son los géneros vinculados a este libro.");
+
+    while (ask) {
+      genres = genresBooksController.getGenresByBookId(bookId);
+      genreBookView.showGenresByBookId(genres);
+      System.out.println("\nElija la opción que quiera realizar para los géneros de este libro");
+      System.out.println(" 1. Agregar nuevo género\n 2. Desvincular género\n 3. Salir");
+
+      int genreOption = scanner.nextInt();
+      scanner.nextLine();
+
+      switch (genreOption) {
+        case 1:
+          List<Genre> newGenres = getGenres(scanner);
+          addGenres(newGenres, bookId);
+          System.out.println(
+              "\nEstos son los géneros vinculados a este libro actualizados.");
+          break;
+        case 2:
+          boolean foundGenre = false;
+          while (!foundGenre) {
+            System.out.println("Introduzca el id del género a desvincular");
+            int genreId = scanner.nextInt();
+            foundGenre = genres.stream().anyMatch(genre -> genre.getIdGenre() == genreId);
+            if (foundGenre) {
+              System.out.println("Desvinculando género...");
+              genresBooksController.deleteGenresBookByBookId(bookId, genreId);
+              System.out.println(
+                  "\nEstos son los generos vinculados a este libro actualizados.");
+            } else {
+              System.out.println("Número de id incorrecto");
+            }
+          }
+          break;
+        case 3:
+          ask = false;
+          return genres;
+        default:
+          System.out.println("Input incorrecto. Intente de nuevo");
+      }
+    }
+    return genres;
+  }
 }
