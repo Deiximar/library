@@ -43,6 +43,7 @@ public class BookView {
   public BookView(BooksController booksController) {
     this.booksController = booksController;
   }
+  public String RESET = "\033[0m";
 
   public void showAllBooks() {
     List<Book> books = booksController.getAllBooks();
@@ -75,7 +76,7 @@ public class BookView {
   public void addBook(Scanner scanner) {
     scanner.nextLine();
 
-    System.out.println("\nPara añadir un libro ingrese los siguientes campos: \n");
+    System.out.println("\n\033[33mPara añadir un libro ingrese los siguientes campos: \n" + RESET);
     System.out.print("Título: ");
     String title = scanner.nextLine();
     System.out.print("Descripción: ");
@@ -94,13 +95,13 @@ public class BookView {
       success = authorView.addAuthors(authors, bookId);
       success = genreView.addGenres(genres, bookId);
       if (success) {
-        System.out.println("Se ha añadido un libro correctamente!");
+        System.out.println("\n\033[32mSe ha añadido un libro correctamente!" + RESET);
       } else {
         System.out.println(
             "Se ha añadido un libro, pero no se asociaron los autores o géneros correctamente!");
       }
     } else {
-      System.out.println("Fallo al añadir libro.");
+      System.out.println("\n\033[31mFallo al añadir libro." + RESET);
     }
   };
 
