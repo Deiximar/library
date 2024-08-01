@@ -17,7 +17,6 @@ public class DBManager {
   public static Connection initConnection() {
     try {
       connection = DriverManager.getConnection(url, username, password);
-      System.out.println("Conectado a la base de datos de PostgreSQL");
     } catch (Exception e) {
       e.printStackTrace();
     }

@@ -60,8 +60,25 @@ public class AuthorBookDAO implements AuthorBookDAOInterface {
     return resultRowsDeleted;
   }
 
+  public int deleteAuthorBookByBookId(int bookId, int authorId) {
+    String query = "DELETE FROM authors_books WHERE id_book = ? AND id_author = ?";
+    int resultRowsDeleted = 0;
+    try {
+      connect = DBManager.initConnection();
+      preparedStatement = connect.prepareStatement(query);
+
+      preparedStatement.setInt(1, bookId);
+      preparedStatement.setInt(2, authorId);
+      resultRowsDeleted = preparedStatement.executeUpdate();
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
+    return resultRowsDeleted;
+  }
+
   public List<Author> getAuthorsByBookId(int bookId) {
     List<Author> authors = new ArrayList<>();
+
     ResultSet resultSet = null;
     try {
       connect = DBManager.initConnection();
@@ -70,6 +87,7 @@ public class AuthorBookDAO implements AuthorBookDAOInterface {
         preparedStatement = connect.prepareStatement(selectQuery);
         preparedStatement.setInt(1, bookId);
         resultSet = preparedStatement.executeQuery();
+
         while (resultSet.next()) {
           Author author = new Author();
           author.setIdAuthor(resultSet.getInt("id_author"));
@@ -80,8 +98,10 @@ public class AuthorBookDAO implements AuthorBookDAOInterface {
       } else {
         System.out.println("Conexión a la base de datos fallida");
       }
+
     } catch (Exception e) {
       System.out.println(e.getMessage());
+
     } finally {
       try {
         if (resultSet != null) {
@@ -98,6 +118,6 @@ public class AuthorBookDAO implements AuthorBookDAOInterface {
       }
     }
     return authors;
-  }
 
+  }
 }
