@@ -45,7 +45,11 @@ Este proyecto busca modernizar la gestión de una biblioteca local mediante un s
 
 ## 📹 Demo 
 
-Ver el funcionamiento del sistema en el siguiente video: [](#)
+Ver el funcionamiento del sistema en el siguiente video:
+
+https://github.com/user-attachments/assets/7183543c-e7d8-4b65-ae5b-b292a33de9af
+
+
 
 ## ✅ Testing 
 
