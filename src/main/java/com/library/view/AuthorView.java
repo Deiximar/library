@@ -58,8 +58,8 @@ public class AuthorView {
     while (ask) {
       authors = authorsBooksController.getAuthorsByBookId(bookId);
       authorBookView.showAuthorsByBookId(authors);
-      System.out.println("\nElija la opción que quiera realizar para el o los autores de este libro");
-      System.out.println(" 1. Agregar nuevo autor\n 2. Desvincular autor\n 3. Salir");
+      System.out.println("\033[34m\nElija la opción que quiera realizar para el o los autores de este libro: \033[0m");
+      System.out.println(" 1. Agregar nuevo autor\n 2. Desvincular autor\n 3. Salir\n");
 
       int authorOption = scanner.nextInt();
       scanner.nextLine();
@@ -68,22 +68,23 @@ public class AuthorView {
         case 1:
           List<Author> newAuthors = getAuthors(scanner);
           addAuthors(newAuthors, bookId);
+          System.out.println("\033[32m\nAgregando author...\033[0m");
           System.out.println(
-              "\nEstos son los autores vinculados a este libro actualizados.");
+              "\033[32m\nEstos son los autores actualizados vinculados a este libro.\033[0m");
           break;
         case 2:
           boolean foundAuthor = false;
           while (!foundAuthor) {
-            System.out.println("Introduzca el id del autor a desvincular");
+            System.out.println("\033[33m\nIntroduzca el id del autor a desvincular\033[0m");
             int idAuthor = scanner.nextInt();
             foundAuthor = authors.stream().anyMatch(author -> author.getIdAuthor() == idAuthor);
             if (foundAuthor) {
-              System.out.println("Desvinculando author...");
+              System.out.println("\033[32m\nDesvinculando author...\033[0m");
               authorsBooksController.deleteAuthorBookByBookId(bookId, idAuthor);
               System.out.println(
-                  "\nEstos son los autores vinculados a este libro actualizados.");
+                  "\033[32m\nEstos son los autores actualizados vinculados a este libro .\033[0m");
             } else {
-              System.out.println("Número de id incorrecto");
+              System.out.println("\033[31m\nNúmero de id incorrecto.\033[0m");
             }
           }
           break;
@@ -91,7 +92,7 @@ public class AuthorView {
           ask = false;
           return authors;
         default:
-          System.out.println("Input incorrecto. Intente de nuevo");
+          System.out.println("\033[31m\nOpción incorrecta. Intente de nuevo. \033[0m");
       }
     }
     return authors;

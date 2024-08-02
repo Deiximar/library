@@ -1,5 +1,6 @@
 package com.library.view;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.StringJoiner;
@@ -52,7 +53,6 @@ public class BookView {
     System.out.printf(tableFormat, "ID", "Título", "Autores", "Géneros", "código ISBN");
 
     for (Book book : books) {
-
       List<Author> authors = authorsBookController.getAuthorsByBookId(book.getIdBook());
       List<Genre> genres = genresBooksController.getGenresByBookId(book.getIdBook());
       StringJoiner authorNamesJoiner = new StringJoiner(", ");
@@ -73,7 +73,7 @@ public class BookView {
 
   public void addBook(Scanner scanner) {
     scanner.nextLine();
-    System.out.println("\nPara añadir un libro ingrese los siguientes campos: \n");
+    System.out.println("\033[34m\nPara añadir un libro ingrese los siguientes campos: \n\033[0m");
     System.out.print("Título: ");
     String title = scanner.nextLine();
     System.out.print("Descripción: ");
@@ -92,13 +92,15 @@ public class BookView {
       success = authorView.addAuthors(authors, bookId);
       success = genreView.addGenres(genres, bookId);
       if (success) {
-        System.out.println("Se ha añadido un libro correctamente!");
+        System.out.println("\nAñadiendo un libro nuevo...");
+        System.out.println("\033[32m\nSe ha añadido un libro correctamente!\033[0m");
+        showBookById(bookId);
       } else {
         System.out.println(
-            "Se ha añadido un libro, pero no se asociaron los autores o géneros correctamente!");
+            "\033[33m\nSe ha añadido un libro, pero no se asociaron los autores o géneros correctamente!");
       }
     } else {
-      System.out.println("Fallo al añadir libro.");
+      System.out.println("\031[31m\nFallo al añadir libro.\033[0m");
     }
   };
 
@@ -106,14 +108,12 @@ public class BookView {
     List<Book> books = booksController.getAllBooks();
     Boolean shouldAskId = true;
     if (books.isEmpty()) {
-      System.out.println("No existe libros para modificar.\n");
+      System.out.println("\033[33mNo existe libros para modificar.\n\033[0m");
       return;
     } else {
-      for (Book book : books) {
-        System.out.println("ID: " + book.getIdBook() + ", Título: " + book.getTitle());
-      }
+      showAllBooks();
     }
-    System.out.println("\nSelección según el Id del libro que quieras eliminar (ver listado arriba)");
+    System.out.println("\033[34m\nSelección según el Id del libro que quieras eliminar (ver listado arriba)\033[0m");
     boolean existBook = false;
     while (shouldAskId) {
       final int bookId = scanner.nextInt();
@@ -136,14 +136,14 @@ public class BookView {
               String newTitle = scanner.nextLine();
               field = "title";
               booksController.updateBookField(field, newTitle, bookId);
-              System.out.println("Actualizando título...");
+              System.out.println("\033[32m\nActualizando título...\033[0m");
               break;
             case 2:
               System.out.println("Ingrese la nueva descripción:");
               String newDescription = scanner.nextLine();
               field = "description";
               booksController.updateBookField(field, newDescription, bookId);
-              System.out.println("Actualizando descripción...");
+              System.out.println("\033[32m\nActualizando descripción...\033[0m");
               break;
             case 3:
               authorView.updateAuthorsByBook(scanner, bookId);
@@ -153,7 +153,7 @@ public class BookView {
               String newCodeISBN = scanner.nextLine();
               field = "isbn_code";
               booksController.updateBookField(field, newCodeISBN, bookId);
-              System.out.println("Actualizando código ISBN...");
+              System.out.println("\033[32m\nActualizando código ISBN...\033[0m");
               break;
             case 5:
               genreView.updateGenresByBook(scanner, bookId);
@@ -162,11 +162,13 @@ public class BookView {
               editing = false;
               break;
             default:
-              System.out.println("Opción no válida.");
+              System.out.println("\033[31mOpción no válida.\033[0m");
           }
         }
       } else {
-        System.out.println("El ID del libro introducido no es válido");
+        System.out.println("\033[31mEl ID del libro introducido no es válido\033[0m");
+        System.out
+            .println("\033[34m\nSelección según el Id del libro que quieras eliminar (ver listado arriba)\033[0m");
         shouldAskId = true;
       }
     }
@@ -317,7 +319,6 @@ public class BookView {
     } else {
       return value.substring(0, length - 3) + "...";
     }
-
   }
 
   public void showBookById(int bookID) {
@@ -333,16 +334,58 @@ public class BookView {
     for (Genre genre : genres) {
       genreNamesJoiner.add(genre.getGenre());
     }
-
     String authorNames = authorNamesJoiner.toString();
     String genreNames = genreNamesJoiner.toString();
-    String tableFormat = "| %-3s | %-30s | %-40s | %-60s | %-40s | %15sn | %n";
-    String line = "+-----+--------------------------------+------------------------------------------+--------------------------------------------------------------+------------------------------------------+------------------+";
+
+    int titleLength = 30;
+    int authorLength = 40;
+    int descriptionLength = 60;
+    int genreLength = 40;
+    int isbnLength = 15;
+
+    List<String> wrappedTitle = wrapText(book.getTitle(), titleLength);
+    List<String> wrappedAuthors = wrapText(authorNames, authorLength);
+    List<String> wrappedDescription = wrapText(book.getDescription(), descriptionLength);
+    List<String> wrappedGenres = wrapText(genreNames, genreLength);
+    List<String> wrappedISBN = wrapText(book.getCodeISBN(), isbnLength);
+
+    int maxLines = Math.max(Math.max(wrappedTitle.size(), wrappedAuthors.size()),
+        Math.max(wrappedDescription.size(),
+            Math.max(wrappedGenres.size(), wrappedISBN.size())));
+
+    String tableFormat = "| %-3s | %-30s | %-28s | %-62s | %-23s | %15sn | %n";
+    String line = "+-----+--------------------------------+------------------------------+----------------------------------------------------------------+-------------------------+------------------+";
     System.out.println(line);
     System.out.printf(tableFormat, "ID", "Título", "Autores", "Descripción", "Géneros", "Código ISBN");
     System.out.println(line);
-    System.out.printf(tableFormat, book.getIdBook(), book.getTitle(), authorNames, book.getDescription(), genreNames,
-        book.getCodeISBN());
+    for (int i = 0; i < maxLines; i++) {
+      System.out.printf(tableFormat,
+          (i == 0 ? book.getIdBook() : ""),
+          (i < wrappedTitle.size() ? wrappedTitle.get(i) : ""),
+          (i < wrappedAuthors.size() ? wrappedAuthors.get(i) : ""),
+          (i < wrappedDescription.size() ? wrappedDescription.get(i) : ""),
+          (i < wrappedGenres.size() ? wrappedGenres.get(i) : ""),
+          (i < wrappedISBN.size() ? wrappedISBN.get(i) : ""));
+    }
     System.out.println(line);
+  }
+
+  private static List<String> wrapText(String text, int length) {
+    List<String> wrappedText = new ArrayList<>();
+    String[] words = text.split(" ");
+    StringBuilder line = new StringBuilder();
+
+    for (String word : words) {
+      if (line.length() + word.length() > length) {
+        wrappedText.add(line.toString());
+        line = new StringBuilder();
+      }
+      if (line.length() > 0) {
+        line.append(" ");
+      }
+      line.append(word);
+    }
+    wrappedText.add(line.toString());
+    return wrappedText;
   }
 }
