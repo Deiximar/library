@@ -57,7 +57,7 @@ public class GenreView {
     while (ask) {
       genres = genresBooksController.getGenresByBookId(bookId);
       genreBookView.showGenresByBookId(genres);
-      System.out.println("\nElija la opción que quiera realizar para los géneros de este libro");
+      System.out.println("\033[34m\nElija la opción que quiera realizar para los géneros de este libro: \033[0m");
       System.out.println(" 1. Agregar nuevo género\n 2. Desvincular género\n 3. Salir");
 
       int genreOption = scanner.nextInt();
@@ -67,22 +67,23 @@ public class GenreView {
         case 1:
           List<Genre> newGenres = getGenres(scanner);
           addGenres(newGenres, bookId);
+          System.out.println("\033[32m\nAgregando género...\033[0m");
           System.out.println(
-              "\nEstos son los géneros vinculados a este libro actualizados.");
+              "\033[32m\nEstos son los géneros vinculados a este libro actualizados.\033[0m");
           break;
         case 2:
           boolean foundGenre = false;
           while (!foundGenre) {
-            System.out.println("Introduzca el id del género a desvincular");
+            System.out.println("\033[33m\nIntroduzca el id del género a desvincular\033[0m");
             int genreId = scanner.nextInt();
             foundGenre = genres.stream().anyMatch(genre -> genre.getIdGenre() == genreId);
             if (foundGenre) {
-              System.out.println("Desvinculando género...");
+              System.out.println("\033[32m\nDesvinculando género...\033[0m");
               genresBooksController.deleteGenresBookByBookId(bookId, genreId);
               System.out.println(
-                  "\nEstos son los generos vinculados a este libro actualizados.");
+                  "\n\033[32m\nEstos son los generos vinculados a este libro actualizados.\033[0m");
             } else {
-              System.out.println("Número de id incorrecto");
+              System.out.println("\033[31m\nNúmero de id incorrecto.\033[0m");
             }
           }
           break;
@@ -90,7 +91,7 @@ public class GenreView {
           ask = false;
           return genres;
         default:
-          System.out.println("Input incorrecto. Intente de nuevo");
+          System.out.println("\033[31m\nOpción incorrecta. Intente de nuevo. \033[0m");
       }
     }
     return genres;

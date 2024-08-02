@@ -26,11 +26,18 @@ public class AuthorBookView {
 
   public void showAuthorsByBookId(List<Author> authors) {
     if (authors.isEmpty()) {
-      System.out.println("No existe autores para este libro.\n");
+      System.out.println("\033[31mNo existe autores para este libro.\n\033[0m");
       return;
     } else {
+
+      String tableFormat = "| %-3s | %-30s | %-30s | %n";
+      String line = "+-----+--------------------------------+--------------------------------+";
+      System.out.println(line);
+      System.out.printf(tableFormat, "ID", "Nombre", "Apellido");
+      System.out.println(line);
       for (Author author : authors) {
-        System.out.println("ID: " + author.getIdAuthor() + ", Autor: " + author.getName() + " " + author.getLastName());
+        System.out.printf(tableFormat, author.getIdAuthor(), author.getName(), author.getLastName());
+        System.out.println(line);
       }
     }
   }

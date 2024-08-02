@@ -38,6 +38,7 @@ public class App {
                         bookView.showAllBooks();
                         break;
                     case 2:
+                        bookView.showBookById(32);
                         bookView.addBook(scanner);
                         break;
                     case 3:
